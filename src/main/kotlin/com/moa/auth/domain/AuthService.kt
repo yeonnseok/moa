@@ -1,13 +1,13 @@
 package com.moa.auth.domain
 
 import com.moa.common.JwtTokenProvider
-import com.moa.common.hash
 import com.moa.exceptions.EmailDuplicatedException
 import com.moa.exceptions.PasswordNotEqualException
 import com.moa.exceptions.PasswordNotMatchedException
 import com.moa.exceptions.UserNotFoundException
 import com.moa.auth.controller.request.LoginRequest
 import com.moa.auth.controller.request.SignupRequest
+import com.moa.common.hashed
 import com.moa.user.domain.UserRepository
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -53,7 +53,7 @@ class AuthService(
     }
 
     private fun checkPassword(password: String, hashed: String) {
-        if (hash(password) != hashed) {
+        if (password.hashed() != hashed) {
             throw PasswordNotMatchedException()
         }
     }

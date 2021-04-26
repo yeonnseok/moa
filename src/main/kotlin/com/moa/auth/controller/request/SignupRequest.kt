@@ -1,6 +1,6 @@
 package com.moa.auth.controller.request
 
-import com.moa.common.hash
+import com.moa.common.hashed
 import com.moa.user.domain.User
 
 data class SignupRequest(
@@ -14,7 +14,7 @@ data class SignupRequest(
         return User(
             username = username,
             email = email,
-            password = hash(password),
+            password = password.hashed(),
             image = image
         )
     }

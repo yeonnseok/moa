@@ -1,6 +1,7 @@
 package com.moa.common
 
 import com.moa.exceptions.BadRequestException
+import com.moa.exceptions.UnAuthorizedException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -13,7 +14,7 @@ class ExceptionHandlers {
     private val log = LoggerFactory.getLogger(javaClass)
 
     @ExceptionHandler(BadRequestException::class)
-    fun badRequestErrorHandler(e: BadRequestException) : ResponseEntity<ApiResponse> {
+    fun badRequestErrorHandler(e: BadRequestException): ResponseEntity<ApiResponse> {
         val error = ApiResponse(
             result = ResultType.FAIL,
             statusCode = HttpStatus.BAD_REQUEST.value(),
@@ -23,12 +24,22 @@ class ExceptionHandlers {
     }
 
     @ExceptionHandler(RuntimeException::class)
-    fun internalServerErrorHandler(e: RuntimeException) : ResponseEntity<ApiResponse> {
+    fun internalServerErrorHandler(e: RuntimeException): ResponseEntity<ApiResponse> {
         val error = ApiResponse(
             result = ResultType.FAIL,
             statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value(),
             data = ErrorResponse(e.message ?: "서버에 문제가 발생했습니다")
         )
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error)
+    }
+
+    @ExceptionHandler(UnAuthorizedException::class)
+    fun unAuthorizedErrorHandler(e: UnAuthorizedException): ResponseEntity<ApiResponse> {
+        val error = ApiResponse(
+            result = ResultType.FAIL,
+            statusCode = HttpStatus.UNAUTHORIZED.value(),
+            data = ErrorResponse(e.message ?: "인증 정보를 불러올 수 없습니다.")
+        )
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error)
     }
 }

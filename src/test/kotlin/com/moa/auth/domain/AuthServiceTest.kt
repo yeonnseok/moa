@@ -1,11 +1,11 @@
 package com.moa.auth.domain
 
-import com.moa.common.hash
 import com.moa.exceptions.EmailDuplicatedException
 import com.moa.exceptions.PasswordNotEqualException
 import com.moa.exceptions.PasswordNotMatchedException
 import com.moa.auth.controller.request.LoginRequest
 import com.moa.auth.controller.request.SignupRequest
+import com.moa.common.hashed
 import com.moa.user.domain.User
 import com.moa.user.domain.UserRepository
 import io.kotlintest.shouldBe
@@ -45,7 +45,7 @@ internal class AuthServiceTest {
             User(
                 username = "moa",
                 email = "moa@com",
-                password = hash("m123")
+                password = "m123".hashed()
             )
         )
         val request = SignupRequest("moa", "moa@com", "m123", "m123")
@@ -76,7 +76,7 @@ internal class AuthServiceTest {
             User(
                 username = "moa",
                 email = "moa@com",
-                password = hash("m123")
+                password = "m123".hashed()
             )
         )
         val request = LoginRequest("moa@com", "m111")
@@ -95,7 +95,7 @@ internal class AuthServiceTest {
             User(
                 username = "moa",
                 email = "moa@com",
-                password = hash("m123")
+                password = "m123".hashed()
             )
         )
         val request = LoginRequest("moa@com", "m123")
