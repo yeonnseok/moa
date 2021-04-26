@@ -1,46 +1,45 @@
 package com.moa.acceptance
 
-import com.moa.common.ApiResponse
 import com.moa.common.ResultType
-import com.moa.user.controller.request.SignupRequest
+import com.moa.auth.controller.request.LoginRequest
+import com.moa.auth.controller.request.SignupRequest
 import io.kotlintest.shouldBe
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.DynamicTest
+import org.junit.jupiter.api.DynamicTest.dynamicTest
+import org.junit.jupiter.api.TestFactory
 import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
+import java.util.stream.Stream
 
 internal class AuthAcceptanceTest : AcceptanceTest() {
 
-    @Test
-    fun `회원가입에 실패한다 - 비밀번호 불일치`() {
-        val request = SignupRequest("moa", "moa@com", "m123", "m111")
+    @DisplayName("사용자 회원가입/로그인 인수테스트")
+    @TestFactory
+    fun auth(): Stream<DynamicTest> {
+        return Stream.of(
+            dynamicTest("회원 가입", {
+                // given
+                val request = SignupRequest("moa", "auth@com", "m123", "m123")
 
-        val response = given().
-                body(request).
-                contentType(MediaType.APPLICATION_JSON_VALUE).
-                accept(MediaType.APPLICATION_JSON_VALUE).
-        `when`().
-                post("/auth/signup").
-        then().
-                log().all().
-                statusCode(HttpStatus.BAD_REQUEST.value()).
-                extract().`as`(ApiResponse::class.java)
+                // when
+                val response = post("/api/auth/signup", request)
 
-        response.result shouldBe ResultType.FAIL
-        response.statusCode shouldBe 400
-    }
+                // then
+                response.result shouldBe ResultType.SUCCESS
+                response.statusCode shouldBe HttpStatus.CREATED.value()
+            }),
 
-    @Test
-    fun `회원가입에 성공한다`() {
-        val request = SignupRequest("moa", "moa@com", "m123", "m123")
+            dynamicTest("로그인", {
+                // given
+                val request = LoginRequest("auth@com", "m123")
 
-        given().
-                body(request).
-                contentType(MediaType.APPLICATION_JSON_VALUE).
-                accept(MediaType.APPLICATION_JSON_VALUE).
-        `when`().
-                post("/auth/signup").
-        then().
-                log().all().
-                statusCode(HttpStatus.CREATED.value())
+                // when
+                val response = login("/api/auth/login", request)
+
+                // then
+                response.result shouldBe ResultType.SUCCESS
+                response.statusCode shouldBe HttpStatus.OK.value()
+            })
+        )
     }
 }
