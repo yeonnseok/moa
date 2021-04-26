@@ -1,5 +1,6 @@
 package com.moa.auth.controller
 
+import com.moa.auth.controller.interceptor.NoValidate
 import com.moa.common.ApiResponse
 import com.moa.auth.controller.request.LoginRequest
 import com.moa.auth.controller.request.SignupRequest
@@ -19,6 +20,7 @@ import java.net.URI
 class AuthController(
     private val authService: AuthService
 ) {
+    @NoValidate
     @PostMapping("/signup")
     fun signup(@RequestBody request: SignupRequest): ResponseEntity<ApiResponse> {
         val userId = authService.signup(request)
@@ -33,6 +35,7 @@ class AuthController(
             )
     }
 
+    @NoValidate
     @PostMapping("/login")
     fun login(@RequestBody request: LoginRequest): ResponseEntity<ApiResponse> {
         val token = authService.login(request)
