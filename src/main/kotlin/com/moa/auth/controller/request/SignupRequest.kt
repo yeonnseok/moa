@@ -1,4 +1,4 @@
-package com.moa.user.controller.request
+package com.moa.auth.controller.request
 
 import com.moa.common.hash
 import com.moa.user.domain.User

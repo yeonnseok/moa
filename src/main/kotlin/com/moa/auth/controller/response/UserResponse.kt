@@ -1,4 +1,4 @@
-package com.moa.user.controller.response
+package com.moa.auth.controller.response
 
 import com.moa.user.domain.User
 
