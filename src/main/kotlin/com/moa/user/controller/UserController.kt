@@ -1,21 +1,22 @@
 package com.moa.user.controller
 
-import com.moa.auth.controller.resolver.LoginUser
 import com.moa.auth.controller.response.UserResponse
 import com.moa.common.ApiResponse
 import com.moa.user.controller.request.UserUpdateRequest
-import com.moa.user.domain.User
 import com.moa.user.domain.UserService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1/users")
 class UserController(
     private val userService: UserService
 ) {
     @GetMapping("/{id}")
-    fun find(@LoginUser user: User): ResponseEntity<ApiResponse> {
+    fun find(@PathVariable id: Long): ResponseEntity<ApiResponse> {
+
+        val user = userService.find(id)
+
         return ResponseEntity
             .ok(ApiResponse(data = UserResponse.of(user)))
     }
@@ -25,6 +26,7 @@ class UserController(
         @PathVariable id: Long,
         @RequestBody request: UserUpdateRequest
     ): ResponseEntity<ApiResponse> {
+
         userService.update(id, request)
 
         return ResponseEntity
