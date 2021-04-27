@@ -1,8 +1,8 @@
 package com.moa.user.controller
 
-import com.moa.auth.controller.response.UserResponse
 import com.moa.common.ApiResponse
 import com.moa.user.controller.request.UserUpdateRequest
+import com.moa.user.controller.response.UserResponse
 import com.moa.user.domain.UserService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
