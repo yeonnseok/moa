@@ -12,7 +12,7 @@ data class UserResponse(
     companion object {
         fun of(user: User): UserResponse {
             return UserResponse(
-                username = user.username,
+                username = user.nickName,
                 email = user.email,
                 image = user.image,
                 role = user.role

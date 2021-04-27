@@ -2,7 +2,7 @@ package com.moa.acceptance
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.moa.auth.controller.request.LoginRequest
-import com.moa.user.controller.request.UserCreateRequest
+import com.moa.auth.controller.request.SignupRequest
 import com.moa.auth.controller.response.TokenResponse
 import com.moa.auth.controller.response.UserCreateResponse
 import com.moa.common.ApiResponse
@@ -33,9 +33,6 @@ abstract class AcceptanceTest {
     private lateinit var databaseCleanup: DatabaseCleanup
 
     @Autowired
-    private lateinit var jwtTokenProvider: JwtTokenProvider
-
-    @Autowired
     protected lateinit var objectMapper: ObjectMapper
 
     protected var userId: Long? = null
@@ -59,7 +56,7 @@ abstract class AcceptanceTest {
     }
 
     private fun createUser(): Long {
-        val request = UserCreateRequest("moa", "moa@com", "m123", "m123", "ROLE_USER")
+        val request = SignupRequest("moa", "moa@com", "m123", "m123", "ROLE_USER")
 
         val response = post("/api/v1/auth/signup", request)
 

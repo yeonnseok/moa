@@ -1,6 +1,7 @@
 package com.moa.common
 
 import com.moa.exceptions.BadRequestException
+import com.moa.exceptions.UnAuthorizedException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -33,8 +34,8 @@ class ExceptionHandlers {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error)
     }
 
-    @ExceptionHandler(AuthenticationException::class)
-    fun unAuthorizedErrorHandler(e: AuthenticationException): ResponseEntity<ApiResponse> {
+    @ExceptionHandler(AuthenticationException::class, UnAuthorizedException::class)
+    fun unAuthorizedErrorHandler(e: RuntimeException): ResponseEntity<ApiResponse> {
         val error = ApiResponse(
             result = ResultType.FAIL,
             statusCode = HttpStatus.UNAUTHORIZED.value(),

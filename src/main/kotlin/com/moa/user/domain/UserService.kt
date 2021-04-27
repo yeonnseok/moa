@@ -1,6 +1,6 @@
 package com.moa.user.domain
 
-import com.moa.user.controller.request.UserCreateRequest
+import com.moa.auth.controller.request.SignupRequest
 import com.moa.exceptions.EmailDuplicatedException
 import com.moa.exceptions.PasswordNotEqualException
 import com.moa.exceptions.UserNotFoundException
@@ -19,7 +19,7 @@ class UserService(
     private val log = LoggerFactory.getLogger(javaClass)
 
     @Transactional
-    fun create(request: UserCreateRequest): Long {
+    fun create(request: SignupRequest): Long {
         validateUserEmail(request.email)
         validatePassword(request.password, request.password2)
 
@@ -30,8 +30,7 @@ class UserService(
     }
 
     private fun validateUserEmail(email: String) {
-        val existUser = userRepository.findByEmail(email)
-        if (existUser != null) {
+        if (userRepository.existsByEmail(email)) {
             throw EmailDuplicatedException()
         }
     }
@@ -51,8 +50,8 @@ class UserService(
     fun update(id: Long, request: UserUpdateRequest): User {
         val user = find(id)
 
-        if (request.username != null) {
-            user.username = request.username
+        if (request.nickName != null) {
+            user.nickName = request.nickName
         }
         if (request.password != null) {
             user.password = passwordEncoder.encode(request.password)
@@ -60,7 +59,6 @@ class UserService(
         if (request.image != null) {
             user.image = request.image
         }
-
         return user
     }
 }
