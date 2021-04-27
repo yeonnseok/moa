@@ -1,6 +1,6 @@
 package com.moa.user.domain
 
-import com.moa.user.controller.request.UserCreateRequest
+import com.moa.auth.controller.request.SignupRequest
 import com.moa.exceptions.EmailDuplicatedException
 import com.moa.exceptions.PasswordNotEqualException
 import com.moa.user.controller.request.UserUpdateRequest
@@ -29,8 +29,8 @@ internal class UserServiceTest {
     @Test
     fun `유저 생성 실패 - 비밀번호 확인`() {
         // given
-        val request = UserCreateRequest(
-            username = "moa",
+        val request = SignupRequest(
+            nickName = "moa",
             email = "moa@com",
             password = "m123",
             password2 = "m111",
@@ -49,15 +49,15 @@ internal class UserServiceTest {
         // given
         userRepository.save(
             User(
-                username = "moa",
+                nickName = "moa",
                 email = "moa@com",
                 password = passwordEncoder.encode("m123"),
                 role = RoleType.ROLE_USER
             )
         )
 
-        val request = UserCreateRequest(
-            username = "moa",
+        val request = SignupRequest(
+            nickName = "moa",
             email = "moa@com",
             password = "m123",
             password2 = "m123",
@@ -74,8 +74,8 @@ internal class UserServiceTest {
     @Test
     fun `회원가입에 성공한다`() {
         // given
-        val request = UserCreateRequest(
-            username = "moa",
+        val request = SignupRequest(
+            nickName = "moa",
             email = "moa@com",
             password = "m123",
             password2 = "m123",
@@ -94,7 +94,7 @@ internal class UserServiceTest {
         // given
         val savedUser = userRepository.save(
             User(
-                username = "moa",
+                nickName = "moa",
                 email = "moa@com",
                 password = passwordEncoder.encode("m123"),
                 role = RoleType.ROLE_USER
@@ -113,7 +113,7 @@ internal class UserServiceTest {
         // given
         val savedUser = userRepository.save(
             User(
-                username = "moa",
+                nickName = "moa",
                 email = "moa@com",
                 password = passwordEncoder.encode("m123"),
                 role = RoleType.ROLE_USER
@@ -124,7 +124,7 @@ internal class UserServiceTest {
         val user = sut.update(
             savedUser.id!!,
             UserUpdateRequest(
-                username = "changed username",
+                nickName = "changed username",
                 password = "change pw",
                 image = "changed url"
             )
@@ -132,7 +132,7 @@ internal class UserServiceTest {
 
         // then
         val findUser = sut.find(user.id!!)
-        findUser.username shouldBe "changed username"
+        findUser.nickName shouldBe "changed username"
         passwordEncoder.matches("change pw", findUser.password) shouldBe true
         findUser.image shouldBe "changed url"
     }
