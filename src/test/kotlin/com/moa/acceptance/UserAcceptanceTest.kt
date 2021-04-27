@@ -1,6 +1,6 @@
 package com.moa.acceptance
 
-import com.moa.auth.controller.response.UserResponse
+import com.moa.user.controller.response.UserResponse
 import com.moa.common.ResultType
 import com.moa.user.controller.request.UserUpdateRequest
 import io.kotlintest.shouldBe
