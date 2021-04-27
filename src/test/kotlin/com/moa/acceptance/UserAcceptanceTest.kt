@@ -19,7 +19,7 @@ class UserAcceptanceTest : AcceptanceTest() {
         return Stream.of(
             dynamicTest("로그인 유저 조회", {
                 // when
-                val response = get("/api/v1/users/${userId}")
+                val response = get("/api/v1/users/me")
 
                 // then
                 response.result shouldBe ResultType.SUCCESS
@@ -34,13 +34,13 @@ class UserAcceptanceTest : AcceptanceTest() {
             dynamicTest("로그인 유저 정보 수정", {
                 // given
                 val request = UserUpdateRequest(
-                    username = "changed username",
+                    nickName = "changed username",
                     password = "changed pw",
                     image = "changed image"
                 )
 
                 // when
-                patch("/api/v1/users/${userId}", request)
+                patch("/api/v1/users/me", request)
             })
         )
     }
