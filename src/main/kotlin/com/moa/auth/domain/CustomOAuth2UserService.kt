@@ -19,8 +19,6 @@ class CustomOAuth2UserService(
     private val log = LoggerFactory.getLogger(javaClass)
 
     override fun loadUser(oAuth2UserRequest: OAuth2UserRequest): OAuth2User {
-        log.info("userRequest: $oAuth2UserRequest")
-
         val oAuth2User = super.loadUser(oAuth2UserRequest)
         try {
             return processOAuth2User(oAuth2UserRequest, oAuth2User)
@@ -38,14 +36,13 @@ class CustomOAuth2UserService(
         )
 
         if (oAuth2UserInfo.getEmail().isBlank()) {
-            throw OAuth2AuthenticationProcessingException("Email not found from OAuth2 Provider")
+            throw OAuth2AuthenticationProcessingException("OAuath2로 부터 Email을 받아오지 못했습니다.")
         }
 
         var user = userRepository.findByEmail(oAuth2UserInfo.getEmail())
         if (user != null) {
             if (user.authProvider != AuthProvider.of(oAuth2UserRequest.clientRegistration.registrationId)) {
-                throw OAuth2AuthenticationProcessingException("Looks like you're signed up with ${user.authProvider} account. " +
-                        "Please use your ${user.authProvider} account to login.")
+                throw OAuth2AuthenticationProcessingException("${user.authProvider} 계정이 존재합니다.")
             }
             user = updateExistingUser(user, oAuth2UserInfo)
         } else {
