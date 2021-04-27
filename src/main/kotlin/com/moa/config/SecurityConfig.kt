@@ -7,6 +7,7 @@ import com.moa.auth.security.JwtTokenProvider
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.builders.WebSecurity
@@ -29,7 +30,16 @@ class SecurityConfig(
     override fun authenticationManagerBean() = super.authenticationManagerBean()!!
 
     override fun configure(web: WebSecurity) {
-        web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+        web.ignoring().antMatchers(
+            "/v2/api-docs",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**",
+            "/swagger/**"
+        ).requestMatchers(PathRequest.toStaticResources().atCommonLocations())
     }
 
     override fun configure(http: HttpSecurity) {
@@ -48,6 +58,7 @@ class SecurityConfig(
             .authorizeRequests()
             .antMatchers("/api/v1/admin/**").hasRole("ADMIN")
             .antMatchers("/api/v1/auth/**").permitAll()
+            .antMatchers(HttpMethod.OPTIONS, "/oauth/token").permitAll()
             .anyRequest().authenticated()
 
         http
