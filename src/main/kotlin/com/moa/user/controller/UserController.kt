@@ -1,10 +1,13 @@
 package com.moa.user.controller
 
+import com.moa.auth.domain.UserPrincipal
 import com.moa.common.ApiResponse
 import com.moa.user.controller.request.UserUpdateRequest
 import com.moa.user.controller.response.UserResponse
+import com.moa.user.domain.LoginUser
 import com.moa.user.domain.UserService
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -12,23 +15,21 @@ import org.springframework.web.bind.annotation.*
 class UserController(
     private val userService: UserService
 ) {
-    @GetMapping("/{id}")
-    fun find(@PathVariable id: Long): ResponseEntity<ApiResponse> {
-
-        val user = userService.find(id)
-
+    @GetMapping("/me")
+    @PreAuthorize("hasRole('USER')")
+    fun find(@LoginUser user: UserPrincipal): ResponseEntity<ApiResponse> {
+        val findUser = userService.find(user.getId())
         return ResponseEntity
-            .ok(ApiResponse(data = UserResponse.of(user)))
+            .ok(ApiResponse(data = UserResponse.of(findUser)))
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/me")
+    @PreAuthorize("hasRole('USER')")
     fun update(
-        @PathVariable id: Long,
+        @LoginUser user: UserPrincipal,
         @RequestBody request: UserUpdateRequest
     ): ResponseEntity<ApiResponse> {
-
-        userService.update(id, request)
-
+        userService.update(user.getId(), request)
         return ResponseEntity
             .noContent()
             .build()
