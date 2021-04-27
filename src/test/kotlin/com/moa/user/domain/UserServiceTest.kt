@@ -1,11 +1,16 @@
 package com.moa.user.domain
 
-import com.moa.common.hashed
+import com.moa.user.controller.request.UserCreateRequest
+import com.moa.exceptions.EmailDuplicatedException
+import com.moa.exceptions.PasswordNotEqualException
 import com.moa.user.controller.request.UserUpdateRequest
 import io.kotlintest.shouldBe
+import io.kotlintest.shouldNotBe
+import io.kotlintest.shouldThrow
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.test.context.jdbc.Sql
 
 @SpringBootTest
@@ -18,6 +23,72 @@ internal class UserServiceTest {
     @Autowired
     private lateinit var userRepository: UserRepository
 
+    @Autowired
+    private lateinit var passwordEncoder: PasswordEncoder
+
+    @Test
+    fun `유저 생성 실패 - 비밀번호 확인`() {
+        // given
+        val request = UserCreateRequest(
+            username = "moa",
+            email = "moa@com",
+            password = "m123",
+            password2 = "m111",
+            role = "ROLE_USER"
+        )
+
+        // when
+        val exception = shouldThrow<PasswordNotEqualException> { sut.create(request) }
+
+        // then
+        exception.message shouldBe "비밀번호가 서로 다릅니다."
+    }
+
+    @Test
+    fun `유저 생성 실패 - 중복 email`() {
+        // given
+        userRepository.save(
+            User(
+                username = "moa",
+                email = "moa@com",
+                password = passwordEncoder.encode("m123"),
+                role = RoleType.ROLE_USER
+            )
+        )
+
+        val request = UserCreateRequest(
+            username = "moa",
+            email = "moa@com",
+            password = "m123",
+            password2 = "m123",
+            role = "ROLE_USER"
+        )
+
+        // when
+        val exception = shouldThrow<EmailDuplicatedException> { sut.create(request) }
+
+        // then
+        exception.message shouldBe "이미 존재하는 email 입니다."
+    }
+
+    @Test
+    fun `회원가입에 성공한다`() {
+        // given
+        val request = UserCreateRequest(
+            username = "moa",
+            email = "moa@com",
+            password = "m123",
+            password2 = "m123",
+            role = "ROLE_USER"
+        )
+
+        // when
+        val userId = sut.create(request)
+
+        // then
+        userId shouldNotBe null
+    }
+
     @Test
     fun `유저 조회`() {
         // given
@@ -25,7 +96,8 @@ internal class UserServiceTest {
             User(
                 username = "moa",
                 email = "moa@com",
-                password = "m123".hashed()
+                password = passwordEncoder.encode("m123"),
+                role = RoleType.ROLE_USER
             )
         )
 
@@ -43,12 +115,13 @@ internal class UserServiceTest {
             User(
                 username = "moa",
                 email = "moa@com",
-                password = "m123".hashed()
+                password = passwordEncoder.encode("m123"),
+                role = RoleType.ROLE_USER
             )
         )
 
         // when
-        sut.update(
+        val user = sut.update(
             savedUser.id!!,
             UserUpdateRequest(
                 username = "changed username",
@@ -58,9 +131,9 @@ internal class UserServiceTest {
         )
 
         // then
-        val findUser = sut.find(savedUser.id!!)
+        val findUser = sut.find(user.id!!)
         findUser.username shouldBe "changed username"
-        findUser.password shouldBe "change pw".hashed()
+        passwordEncoder.matches("change pw", findUser.password) shouldBe true
         findUser.image shouldBe "changed url"
     }
 }

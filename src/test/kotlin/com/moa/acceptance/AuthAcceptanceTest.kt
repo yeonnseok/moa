@@ -2,7 +2,7 @@ package com.moa.acceptance
 
 import com.moa.common.ResultType
 import com.moa.auth.controller.request.LoginRequest
-import com.moa.auth.controller.request.SignupRequest
+import com.moa.user.controller.request.UserCreateRequest
 import io.kotlintest.shouldBe
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.DynamicTest
@@ -19,10 +19,10 @@ internal class AuthAcceptanceTest : AcceptanceTest() {
         return Stream.of(
             dynamicTest("회원 가입", {
                 // given
-                val request = SignupRequest("moa", "auth@com", "m123", "m123")
+                val request = UserCreateRequest("moa", "auth@com", "m123", "m123", "ROLE_USER")
 
                 // when
-                val response = post("/api/auth/signup", request)
+                val response = post("/api/v1/auth/signup", request)
 
                 // then
                 response.result shouldBe ResultType.SUCCESS
@@ -34,7 +34,7 @@ internal class AuthAcceptanceTest : AcceptanceTest() {
                 val request = LoginRequest("auth@com", "m123")
 
                 // when
-                val response = login("/api/auth/login", request)
+                val response = login("/api/v1/auth/login", request)
 
                 // then
                 response.result shouldBe ResultType.SUCCESS
