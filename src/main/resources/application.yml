@@ -2,6 +2,23 @@ spring:
   profiles:
     active: local
     include: oauth
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+
+security:
+  jwt:
+    token:
+      secret-key: secretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecret
+      expire-length: 864000000
+  authorized-redirect-uri: "http://localhost:8080/oauth2/redirect"
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
   jpa:
     show-sql: true
     hibernate:
@@ -10,23 +27,6 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
         format_sql: true
-
-  logging:
-    level:
-      org.hibernate.SQL: debug
-
-  security:
-    jwt:
-      token:
-        secret-key: secretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecret
-        expire-length: 864000000
-    authorized-redirect-uri: "http://localhost:8080/oauth2/redirect"
-
----
-spring:
-  config:
-    activate:
-      on-profile: local
   datasource:
     url: jdbc:mysql://localhost:3306/moa?serverTimezone=UTC&characterEncoding=UTF-8
     username: admin
@@ -38,6 +38,14 @@ spring:
   config:
     activate:
       on-profile: dev
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        format_sql: true
   datasource:
     url: jdbc:mysql://localhost:3306/moa?serverTimezone=UTC&characterEncoding=UTF-8
     username: admin
@@ -49,6 +57,14 @@ spring:
   config:
     activate:
       on-profile: live
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        format_sql: true
   datasource:
     url: jdbc:mysql://moa-1.c6gy7w152zdy.ap-northeast-2.rds.amazonaws.com/moa?serverTimezone=UTC&characterEncoding=UTF-8
     username: root
