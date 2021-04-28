@@ -38,3 +38,5 @@ out/
 
 ## profile
 application-*.yml
+application.yml
+application-oauth.yml
