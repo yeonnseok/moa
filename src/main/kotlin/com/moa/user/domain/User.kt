@@ -1,6 +1,7 @@
 package com.moa.user.domain
 
 import com.moa.common.BaseEntity
+import org.hibernate.annotations.Type
 import javax.persistence.*
 import javax.validation.constraints.Email
 
@@ -32,5 +33,9 @@ data class User(
     var authProvider: AuthProvider = AuthProvider.LOCAL,
 
     @Column(name = "oauth_id")
-    var oAuthId: String? = null
+    var oAuthId: String? = null,
+
+    @Type(type="yes_no")
+    @Column(name = "onboarding_flag")
+    var onboardingFlag: Boolean = false
 ) : BaseEntity()

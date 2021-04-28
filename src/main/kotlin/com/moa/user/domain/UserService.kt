@@ -59,6 +59,10 @@ class UserService(
         if (request.image != null) {
             user.image = request.image
         }
+        if (request.onboardingFlag != null) {
+            user.onboardingFlag = request.onboardingFlag
+        }
+
         return user
     }
 }
