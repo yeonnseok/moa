@@ -11,9 +11,9 @@ class KakaoOAuth2UserInfo(
 
     private val mapType = object : TypeToken<Map<String, Any>>() {}.type
 
-    override fun getId() = attributes.get("id").toString()
+    override fun getOAuthId() = attributes.get("id").toString()
 
-    override fun getName(): String {
+    override fun getNickName(): String {
         val properties: Map<String, Any> =
             Gson().fromJson(attributes.get("properties").toString(), mapType)
 
