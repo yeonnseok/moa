@@ -2,12 +2,16 @@ package com.moa.user.domain
 
 enum class AuthProvider {
     LOCAL,
-    GOOGLE;
+    GOOGLE,
+    KAKAO;
 
     companion object {
-        fun of(name: String): AuthProvider =
+        fun of(provider: String): AuthProvider =
             values()
-                .filter { it.name.equals(name, ignoreCase = true) }
+                .filter { it.name.equals(provider, ignoreCase = true) }
                 .first()
     }
+
+    fun equalWith(provider: String) =
+        provider.equals(this.name, ignoreCase = true)
 }

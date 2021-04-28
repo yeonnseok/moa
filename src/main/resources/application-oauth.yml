@@ -7,4 +7,22 @@ spring:
             client-id: 453855923699-ne9sj9emehb3eur80sgl20a14ojpmjg0.apps.googleusercontent.com
             client-secret: 7xB9DBpPpa3Vx2rxKm6wILEe
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
-            scope: profile, email
+            scope:
+              - profile
+              - email
+          kakao:
+            client-id: a8b403d530f30763da1622e2286b64bd
+            client-secret: DVqvV1mbFsJE28eMIzywx761EO8CdQCH
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            authorization-grant-type: authorization_code
+            scope:
+              - profile
+              - account_email
+            client-name: kakao
+            client-authentication-method: POST
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
