@@ -10,9 +10,9 @@ class NaverOAuth2UserInfo(
     private val mapType = object : TypeToken<Map<String, Any>>() {}.type
     private val response: Map<String, Any> = Gson().fromJson(attributes.get("response").toString(), mapType)
 
-    override fun getId() = response.get("id").toString()
+    override fun getOAuthId() = response.get("id").toString()
 
-    override fun getName() = response.get("nickname").toString()
+    override fun getNickName() = response.get("nickname").toString()
 
     override fun getEmail() = response.get("email").toString()
 }
