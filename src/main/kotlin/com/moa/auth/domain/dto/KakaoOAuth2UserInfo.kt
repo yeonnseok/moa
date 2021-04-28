@@ -21,7 +21,7 @@ class KakaoOAuth2UserInfo(
     }
 
     override fun getEmail(): String {
-        val accounts: HashMap<String, Any> =
+        val accounts: Map<String, Any> =
             Gson().fromJson(attributes.get("kakao_account").toString(), mapType)
 
         return accounts.get("email")?.toString()
