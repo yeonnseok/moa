@@ -6,7 +6,6 @@ import com.moa.auth.controller.request.SignupRequest
 import com.moa.auth.controller.response.TokenResponse
 import com.moa.auth.controller.response.UserCreateResponse
 import com.moa.common.ApiResponse
-import com.moa.auth.security.JwtTokenProvider
 import com.moa.common.ResultType
 import io.kotlintest.shouldBe
 import io.restassured.RestAssured
@@ -19,18 +18,17 @@ import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.jdbc.Sql
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("acceptance")
+@Sql("/truncate.sql")
 abstract class AcceptanceTest {
 
     protected val log = LoggerFactory.getLogger(javaClass)
 
     @LocalServerPort
     protected var port: Int? = null
-
-    @Autowired
-    private lateinit var databaseCleanup: DatabaseCleanup
 
     @Autowired
     protected lateinit var objectMapper: ObjectMapper
@@ -47,9 +45,7 @@ abstract class AcceptanceTest {
     fun setUp() {
         if (RestAssured.port == RestAssured.UNDEFINED_PORT) {
             RestAssured.port = port!!
-            databaseCleanup.afterPropertiesSet()
         }
-        databaseCleanup.execute()
 
         userId = createUser()
         bearerToken = login()
