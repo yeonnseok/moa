@@ -38,5 +38,3 @@ out/
 
 ## profile
 application-*.yml
-*.yml
-*.yaml
