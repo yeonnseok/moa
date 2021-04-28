@@ -3,9 +3,10 @@
 REPOSITORY=/home/ubuntu/server
 cd $REPOSITORY
 
-APP_NAME=sgsg
+APP_NAME=moa
 JAR_NAME=$(ls $REPOSITORY/build/libs/ | grep '.jar' | tail -n 1)
 JAR_PATH=$REPOSITORY/build/libs/$JAR_NAME
+JVM_OPTS="-Dspring.profiles.active=live"
 
 CURRENT_PID=$(pgrep -f $APP_NAME)
 
@@ -19,6 +20,6 @@ else
 fi
 
 echo "> $JAR_PATH 배포"
-nohup java -jar "$JAR_PATH" >> /home/ubuntu/deploy.log 2>&1 &
+nohup java $JVM_OPTS -jar "$JAR_PATH" >> /home/ubuntu/deploy.log 2>&1 &
 
 echo "[$(date)] server deploy" >> /home/ubuntu/deploy.log
