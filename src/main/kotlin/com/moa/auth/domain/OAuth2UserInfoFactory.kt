@@ -6,16 +6,11 @@ import com.moa.auth.domain.dto.NaverOAuth2UserInfo
 import com.moa.auth.domain.dto.OAuth2UserInfo
 import com.moa.exceptions.OAuth2AuthenticationProcessingException
 import com.moa.user.domain.AuthProvider
-import org.slf4j.LoggerFactory
 
-class OAuth2UserInfoFactory
-{
+class OAuth2UserInfoFactory {
     companion object {
-        private val log = LoggerFactory.getLogger(javaClass)
 
         fun getOAuth2UserInfo(registrationId: String, attributes: Map<String, Any>): OAuth2UserInfo {
-            log.info("provider: $registrationId | attributes : $attributes")
-
             return when {
                 AuthProvider.GOOGLE.equalWith(registrationId) -> {
                     GoogleOAuth2UserInfo(attributes)
