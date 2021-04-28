@@ -31,6 +31,6 @@ data class User(
     @Column(name = "auth_provider")
     var authProvider: AuthProvider = AuthProvider.LOCAL,
 
-    @Column(name = "provider_id")
-    var providerId: String? = null
+    @Column(name = "oauth_id")
+    var oAuthId: String? = null
 ) : BaseEntity()
