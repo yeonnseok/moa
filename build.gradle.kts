@@ -10,7 +10,7 @@ plugins {
 
 group = "com.moa"
 version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_11
+java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 configurations {
 	compileOnly {
@@ -23,9 +23,6 @@ repositories {
 }
 
 dependencies {
-	implementation("javax.xml.bind:jaxb-api:2.3.1")
-	implementation("javax.activation:activation:1.1")
-	implementation("org.glassfish.jaxb:jaxb-runtime:2.3.0")
 	implementation("io.jsonwebtoken:jjwt:0.9.1")
 	implementation("com.google.code.gson:gson:2.8.6")
 	implementation("com.google.guava:guava:30.1.1-jre")
@@ -51,7 +48,7 @@ dependencies {
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
 		freeCompilerArgs = listOf("-Xjsr305=strict")
-		jvmTarget = "11"
+		jvmTarget = "1.8"
 	}
 }
 
