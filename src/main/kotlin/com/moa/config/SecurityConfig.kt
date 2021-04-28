@@ -67,6 +67,7 @@ class SecurityConfig(
             .authorizeRequests()
             .antMatchers("/api/v1/admin/**").hasRole("ADMIN")
             .antMatchers("/api/v1/auth/**", "/login/oauth2/**").permitAll()
+            .antMatchers("/oauth/*").permitAll()
             .antMatchers("/").permitAll()
             .anyRequest().authenticated()
 
