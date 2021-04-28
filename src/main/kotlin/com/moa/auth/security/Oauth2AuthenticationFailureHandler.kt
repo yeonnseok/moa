@@ -1,6 +1,7 @@
 package com.moa.auth.security
 
 import com.moa.common.utils.CookieUtils
+import net.minidev.json.JSONObject
 import org.slf4j.LoggerFactory
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler
@@ -22,12 +23,13 @@ class Oauth2AuthenticationFailureHandler(
         exception: AuthenticationException
     ) {
         var targetUrl = CookieUtils.getCookie(
-            request = request,
-            name = cookieOAuth2AuthorizationRequestRepository.redirectUriParamCookieName
-        ).let { it!!.value } ?: "/"
+                request = request,
+                name = cookieOAuth2AuthorizationRequestRepository.redirectUriParamCookieName
+            )?.value ?: "/"
+
+        log.error("exception message {}", exception.message)
 
         targetUrl = UriComponentsBuilder.fromUriString(targetUrl)
-            .queryParam("error", exception.getLocalizedMessage())
             .build().toUriString()
 
         cookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookies(request, response)
