@@ -26,7 +26,7 @@ dependencies {
 	implementation("javax.xml.bind:jaxb-api:2.3.1")
 	implementation("com.sun.xml.bind:jaxb-core:2.3.0.1")
 	implementation("com.sun.xml.bind:jaxb-impl:2.3.3")
-	implementation("javax.activation:activation")
+	implementation("javax.activation:activation:1.1.1")
 	implementation("io.jsonwebtoken:jjwt:0.9.1")
 	implementation("com.google.code.gson:gson:2.8.6")
 	implementation("com.google.guava:guava:30.1.1-jre")
