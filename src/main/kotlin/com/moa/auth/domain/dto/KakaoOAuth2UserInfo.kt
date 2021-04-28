@@ -6,7 +6,7 @@ import com.moa.exceptions.OAuth2AuthenticationProcessingException
 
 
 class KakaoOAuth2UserInfo(
-    override val attributes: Map<String, Any>,
+    override val attributes: Map<String, Any>
 ) : OAuth2UserInfo(attributes) {
 
     private val mapType = object : TypeToken<Map<String, Any>>() {}.type

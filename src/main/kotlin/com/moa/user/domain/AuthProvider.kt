@@ -3,7 +3,8 @@ package com.moa.user.domain
 enum class AuthProvider {
     LOCAL,
     GOOGLE,
-    KAKAO;
+    KAKAO,
+    NAVER;
 
     companion object {
         fun of(provider: String): AuthProvider =
