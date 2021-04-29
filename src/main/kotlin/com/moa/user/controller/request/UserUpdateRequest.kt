@@ -4,5 +4,5 @@ data class UserUpdateRequest(
     val nickName: String?,
     val password: String?,
     val image: String?,
-    val onboardingFlag: Boolean?
+    val onboardingFlag: Boolean? = null
 )
