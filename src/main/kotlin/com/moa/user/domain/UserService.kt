@@ -56,8 +56,8 @@ class UserService(
         if (request.password != null) {
             user.password = passwordEncoder.encode(request.password)
         }
-        if (request.image != null) {
-            user.image = request.image
+        if (request.profileEmotion != null) {
+            user.profileEmotion = Emotion.of(request.profileEmotion)
         }
         if (request.onboardingFlag != null) {
             user.onboardingFlag = request.onboardingFlag

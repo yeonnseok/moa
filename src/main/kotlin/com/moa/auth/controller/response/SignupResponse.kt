@@ -1,5 +1,5 @@
 package com.moa.auth.controller.response
 
-data class UserCreateResponse(
+data class SignupResponse(
     val userId: Long
 )

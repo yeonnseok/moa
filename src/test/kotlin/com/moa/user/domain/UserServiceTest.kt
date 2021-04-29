@@ -126,7 +126,7 @@ internal class UserServiceTest {
             UserUpdateRequest(
                 nickName = "changed username",
                 password = "change pw",
-                image = "changed url"
+                profileEmotion = "changed url"
             )
         )
 
@@ -134,6 +134,6 @@ internal class UserServiceTest {
         val findUser = sut.find(user.id!!)
         findUser.nickName shouldBe "changed username"
         passwordEncoder.matches("change pw", findUser.password) shouldBe true
-        findUser.image shouldBe "changed url"
+        findUser.imageUrl shouldBe "changed url"
     }
 }
