@@ -15,7 +15,7 @@ data class UserResponse(
             return UserResponse(
                 username = user.nickName,
                 email = user.email,
-                profileEmotion = user.profileEmotion!!.name,
+                profileEmotion = user.profileEmotion?.name,
                 role = user.role,
                 onboardingFlag = user.onboardingFlag
             )
