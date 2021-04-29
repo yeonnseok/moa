@@ -52,7 +52,7 @@ abstract class AcceptanceTest {
     }
 
     private fun createUser(): Long {
-        val request = SignupRequest("moa", "moa@com", "m123", "m123", "ROLE_USER")
+        val request = SignupRequest("moa", "moa@com", "m123", "m123", "ROLE_USER", "happy")
 
         val response = post("/api/v1/auth/signup", request)
 
