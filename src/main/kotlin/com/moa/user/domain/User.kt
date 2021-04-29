@@ -22,7 +22,7 @@ data class User(
     var password: String,
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role")
+    @Column(name = "role", nullable = false)
     var role: RoleType,
 
     @Enumerated(EnumType.STRING)
@@ -37,6 +37,6 @@ data class User(
     var oAuthId: String? = null,
 
     @Type(type="yes_no")
-    @Column(name = "onboarding_flag")
+    @Column(name = "onboarding_flag", nullable = false)
     var onboardingFlag: Boolean = false
 ) : BaseEntity()
