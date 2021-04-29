@@ -1,6 +1,7 @@
 spring:
   profiles:
-    include: oauth
+    active: local
+    include: oauth-test
 
   h2:
     console:
@@ -25,4 +26,5 @@ security:
   jwt:
     token:
       secret-key: secretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecret
-      expire-length: 3600000
+      expire-length: 864000000
+  authorized-redirect-uri: "http://localhost:8080/oauth2/redirect"
