@@ -1,7 +1,7 @@
 spring:
   profiles:
     active: local
-    include: oauth-test
+    include: oauth
 
   h2:
     console:
