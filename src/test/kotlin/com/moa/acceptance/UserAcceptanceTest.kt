@@ -27,7 +27,7 @@ class UserAcceptanceTest : AcceptanceTest() {
 
                 val userResponse = getResponseData(response.data, UserResponse::class.java) as UserResponse
 
-                userResponse.username shouldBe "moa"
+                userResponse.nickName shouldBe "moa"
                 userResponse.email shouldBe "moa@com"
             }),
 

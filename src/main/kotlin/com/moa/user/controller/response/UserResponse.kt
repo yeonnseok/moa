@@ -4,7 +4,7 @@ import com.moa.user.domain.RoleType
 import com.moa.user.domain.User
 
 data class UserResponse(
-    val username: String,
+    val nickName: String,
     val email: String,
     val profileEmotion: String?,
     val role: RoleType,
@@ -13,7 +13,7 @@ data class UserResponse(
     companion object {
         fun of(user: User): UserResponse {
             return UserResponse(
-                username = user.nickName,
+                nickName = user.nickName,
                 email = user.email,
                 profileEmotion = user.profileEmotion?.name,
                 role = user.role,
