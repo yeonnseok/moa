@@ -8,7 +8,7 @@ JAR_NAME=$(ls $REPOSITORY/build/libs/ | grep '.jar' | tail -n 1)
 JAR_PATH=$REPOSITORY/build/libs/$JAR_NAME
 JVM_OPTS="
 -Dspring.profiles.active=live
--Dspring.config.location=classpath:/application-oauth.yml,classpath:/application.yml
+-Dspring.config.location=$REPOSITORY/application-oauth.yml,$REPOSITORY/application.yml
 "
 
 CURRENT_PID=$(pgrep -f $APP_NAME)
