@@ -36,7 +36,7 @@ class UserAcceptanceTest : AcceptanceTest() {
                 val request = UserUpdateRequest(
                     nickName = "changed username",
                     password = "changed pw",
-                    image = "changed image"
+                    profileEmotion = "angry"
                 )
 
                 // when
