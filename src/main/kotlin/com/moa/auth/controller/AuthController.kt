@@ -2,7 +2,7 @@ package com.moa.auth.controller
 
 import com.moa.auth.controller.request.LoginRequest
 import com.moa.auth.controller.response.TokenResponse
-import com.moa.auth.controller.response.UserCreateResponse
+import com.moa.auth.controller.response.SignupResponse
 import com.moa.common.ApiResponse
 import com.moa.auth.controller.request.SignupRequest
 import com.moa.auth.security.JwtTokenProvider
@@ -37,7 +37,7 @@ class AuthController(
             .body(
                 ApiResponse(
                     statusCode = HttpStatus.CREATED.value(),
-                    data = UserCreateResponse(userId)
+                    data = SignupResponse(userId)
                 )
             )
     }
