@@ -1,5 +1,6 @@
 package com.moa.auth.controller.request
 
+import com.moa.user.domain.Emotion
 import com.moa.user.domain.RoleType
 import com.moa.user.domain.User
 import javax.validation.constraints.Email
@@ -21,7 +22,7 @@ data class SignupRequest(
 
     val role: String = RoleType.ROLE_USER.name,
 
-    val image: String? = null
+    val profileEmotion: String
 ) {
     fun toEntity(encodedPw: String): User {
         return User(
@@ -29,7 +30,7 @@ data class SignupRequest(
             email = email,
             password = encodedPw,
             role = RoleType.valueOf(role),
-            image = image
+            profileEmotion = Emotion.of(profileEmotion)
         )
     }
 }

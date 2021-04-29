@@ -6,7 +6,7 @@ import com.moa.user.domain.User
 data class UserResponse(
     val username: String,
     val email: String,
-    val image: String?,
+    val profileEmotion: String?,
     val role: RoleType,
     val onboardingFlag: Boolean
 ) {
@@ -15,7 +15,7 @@ data class UserResponse(
             return UserResponse(
                 username = user.nickName,
                 email = user.email,
-                image = user.image,
+                profileEmotion = user.profileEmotion!!.name,
                 role = user.role,
                 onboardingFlag = user.onboardingFlag
             )

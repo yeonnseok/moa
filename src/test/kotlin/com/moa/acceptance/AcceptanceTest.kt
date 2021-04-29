@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.moa.auth.controller.request.LoginRequest
 import com.moa.auth.controller.request.SignupRequest
 import com.moa.auth.controller.response.TokenResponse
-import com.moa.auth.controller.response.UserCreateResponse
+import com.moa.auth.controller.response.SignupResponse
 import com.moa.common.ApiResponse
 import com.moa.common.ResultType
 import io.kotlintest.shouldBe
@@ -59,7 +59,7 @@ abstract class AcceptanceTest {
         response.result shouldBe ResultType.SUCCESS
         response.statusCode shouldBe HttpStatus.CREATED.value()
 
-        val signupResponse = getResponseData(response.data, UserCreateResponse::class.java) as UserCreateResponse
+        val signupResponse = getResponseData(response.data, SignupResponse::class.java) as SignupResponse
         return signupResponse.userId
     }
 

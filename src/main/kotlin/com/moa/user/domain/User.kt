@@ -25,8 +25,9 @@ data class User(
     @Column(name = "role")
     var role: RoleType,
 
-    @Column(name = "image")
-    var image: String? = null,
+    @Enumerated(EnumType.STRING)
+    @Column(name = "profile_emotion")
+    var profileEmotion: Emotion? = null,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "auth_provider")
