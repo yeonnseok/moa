@@ -129,7 +129,7 @@ internal class UserServiceTest {
             UserUpdateRequest(
                 nickName = "changed username",
                 password = "change pw",
-                profileEmotion = "changed emotion"
+                profileEmotion = "angry"
             )
         )
 
@@ -137,6 +137,6 @@ internal class UserServiceTest {
         val findUser = sut.find(user.id!!)
         findUser.nickName shouldBe "changed username"
         passwordEncoder.matches("change pw", findUser.password) shouldBe true
-        findUser.profileEmotion shouldBe "changed emotion"
+        findUser.profileEmotion shouldBe Emotion.ANGRY
     }
 }
