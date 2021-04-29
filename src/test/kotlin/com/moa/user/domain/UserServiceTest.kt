@@ -34,7 +34,8 @@ internal class UserServiceTest {
             email = "moa@com",
             password = "m123",
             password2 = "m111",
-            role = "ROLE_USER"
+            role = "ROLE_USER",
+            profileEmotion = "happy"
         )
 
         // when
@@ -61,7 +62,8 @@ internal class UserServiceTest {
             email = "moa@com",
             password = "m123",
             password2 = "m123",
-            role = "ROLE_USER"
+            role = "ROLE_USER",
+            profileEmotion = "happy"
         )
 
         // when
@@ -79,7 +81,8 @@ internal class UserServiceTest {
             email = "moa@com",
             password = "m123",
             password2 = "m123",
-            role = "ROLE_USER"
+            role = "ROLE_USER",
+            profileEmotion = "happy"
         )
 
         // when
@@ -126,7 +129,7 @@ internal class UserServiceTest {
             UserUpdateRequest(
                 nickName = "changed username",
                 password = "change pw",
-                profileEmotion = "changed url"
+                profileEmotion = "changed emotion"
             )
         )
 
@@ -134,6 +137,6 @@ internal class UserServiceTest {
         val findUser = sut.find(user.id!!)
         findUser.nickName shouldBe "changed username"
         passwordEncoder.matches("change pw", findUser.password) shouldBe true
-        findUser.imageUrl shouldBe "changed url"
+        findUser.profileEmotion shouldBe "changed emotion"
     }
 }
