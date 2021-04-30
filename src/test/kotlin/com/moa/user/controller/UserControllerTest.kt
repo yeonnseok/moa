@@ -1,7 +1,7 @@
-package com.moa.restdocs
+package com.moa.user.controller
 
 import com.moa.common.ResultType
-import com.moa.restdocs.common.LoginUserControllerTest
+import com.moa.restdocs.LoginUserControllerTest
 import com.moa.user.domain.RoleType
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus

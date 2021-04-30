@@ -3,6 +3,7 @@ package com.moa.user.domain
 import com.moa.auth.controller.request.SignupRequest
 import com.moa.exceptions.EmailDuplicatedException
 import com.moa.exceptions.PasswordNotEqualException
+import com.moa.record.domain.EmotionType
 import com.moa.user.controller.request.UserUpdateRequest
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
@@ -137,6 +138,6 @@ internal class UserServiceTest {
         val findUser = sut.find(user.id!!)
         findUser.nickName shouldBe "changed username"
         passwordEncoder.matches("change pw", findUser.password) shouldBe true
-        findUser.profileEmotion shouldBe Emotion.ANGRY
+        findUser.profileEmotionType shouldBe EmotionType.ANGRY
     }
 }

@@ -1,6 +1,6 @@
 package com.moa.auth.controller.request
 
-import com.moa.user.domain.Emotion
+import com.moa.record.domain.EmotionType
 import com.moa.user.domain.RoleType
 import com.moa.user.domain.User
 import javax.validation.constraints.Email
@@ -30,7 +30,7 @@ data class SignupRequest(
             email = email,
             password = encodedPw,
             role = RoleType.valueOf(role),
-            profileEmotion = Emotion.of(profileEmotion)
+            profileEmotionType = EmotionType.of(profileEmotion)
         )
     }
 }

@@ -4,6 +4,7 @@ import com.moa.auth.controller.request.SignupRequest
 import com.moa.exceptions.EmailDuplicatedException
 import com.moa.exceptions.PasswordNotEqualException
 import com.moa.exceptions.UserNotFoundException
+import com.moa.record.domain.EmotionType
 import com.moa.user.controller.request.UserUpdateRequest
 import org.slf4j.LoggerFactory
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -16,8 +17,6 @@ class UserService(
     private val passwordEncoder: PasswordEncoder,
     private val userRepository: UserRepository
 ) {
-    private val log = LoggerFactory.getLogger(javaClass)
-
     @Transactional
     fun create(request: SignupRequest): Long {
         validateUserEmail(request.email)
@@ -57,7 +56,7 @@ class UserService(
             user.password = passwordEncoder.encode(request.password)
         }
         if (request.profileEmotion != null) {
-            user.profileEmotion = Emotion.of(request.profileEmotion)
+            user.profileEmotionType = EmotionType.of(request.profileEmotion)
         }
         if (request.onboardingFlag != null) {
             user.onboardingFlag = request.onboardingFlag

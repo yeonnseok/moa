@@ -1,6 +1,7 @@
 package com.moa.user.domain
 
 import com.moa.common.BaseEntity
+import com.moa.record.domain.EmotionType
 import org.hibernate.annotations.Type
 import javax.persistence.*
 import javax.validation.constraints.Email
@@ -27,7 +28,7 @@ data class User(
 
     @Enumerated(EnumType.STRING)
     @Column(name = "profile_emotion")
-    var profileEmotion: Emotion? = null,
+    var profileEmotionType: EmotionType? = null,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "auth_provider")
