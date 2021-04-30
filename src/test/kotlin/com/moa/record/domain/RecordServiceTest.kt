@@ -113,5 +113,6 @@ internal class RecordServiceTest {
         result.recordDate shouldBe LocalDate.of(2021,5,5)
         result.keywords shouldBe setOf(Keyword.STUDY, Keyword.MONEY)
         result.memo shouldBe "first memo"
+        result.description shouldBe "롤러코스터같이 널뛰기하는 기분"
     }
 }
