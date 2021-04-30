@@ -26,6 +26,9 @@ class Record(
     var memo: String?
 ) : BaseEntity() {
 
+    private val maxScore = 40
+    private val minScore = -40
+
     @OneToMany(mappedBy = "record", cascade = [(CascadeType.ALL)], orphanRemoval = true)
     var emotions: List<Emotion> = ArrayList()
 
@@ -39,7 +42,19 @@ class Record(
         }
     }
 
-    fun totalScore(): Int = emotions.map {
-        it.emotionType.score * it.count
-    }.sum()
+    fun totalScore(): Int {
+        val score = emotions.map {
+            it.emotionType.score * it.count
+        }.sum()
+
+        when {
+            score >= maxScore -> {
+                return maxScore
+            }
+            score <= minScore -> {
+                return minScore
+            }
+            else -> return score
+        }
+    }
 }

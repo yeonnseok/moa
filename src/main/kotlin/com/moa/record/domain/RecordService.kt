@@ -1,8 +1,10 @@
 package com.moa.record.domain
 
+import com.moa.exceptions.DescriptionNotFoundException
 import com.moa.exceptions.RecordExistedSameDayException
 import com.moa.exceptions.RecordNotFoundException
 import com.moa.record.controller.request.RecordCreateRequest
+import com.moa.record.controller.response.RecordResponse
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -11,8 +13,11 @@ import java.time.LocalDate
 @Service
 @Transactional(readOnly = true)
 class RecordService(
-    private val recordRepository: RecordRepository
+    private val recordRepository: RecordRepository,
+    private val descriptionRepository: DescriptionRepository
 ) {
+    private val log = LoggerFactory.getLogger(javaClass)
+
     @Transactional
     fun create(userId: Long, request: RecordCreateRequest): Long {
         validateExistRecord(userId, request.recordDate)
@@ -37,8 +42,16 @@ class RecordService(
         return keywords?.map { Keyword.of(it) }?.toSet()
     }
 
-    fun find(userId: Long, recordDate: LocalDate): Record {
-        return recordRepository.findByUserIdAndRecordDate(userId, recordDate)
+    fun find(userId: Long, recordDate: LocalDate): RecordResponse {
+        val record = recordRepository.findByUserIdAndRecordDate(userId, recordDate)
             ?: throw RecordNotFoundException()
+
+        val score = record.totalScore()
+        log.info("total score : $score")
+        val description =
+            descriptionRepository.findByMaxValueGreaterThanEqualAndMinValueLessThanEqual(score, score)
+                .randomOrNull() ?: throw DescriptionNotFoundException()
+
+        return RecordResponse.of(record, description.description)
     }
 }
