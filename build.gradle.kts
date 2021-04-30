@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
 	id("org.springframework.boot") version "2.4.5"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
+	id("org.asciidoctor.convert") version "1.5.12"
 	kotlin("jvm") version "1.4.32"
 	kotlin("plugin.spring") version "1.4.32"
 	kotlin("plugin.jpa") version "1.4.32"
@@ -32,13 +33,13 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-	implementation("io.springfox:springfox-swagger2:2.9.2")
-	implementation("io.springfox:springfox-swagger-ui:2.9.2")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.security:spring-security-oauth2-client")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("com.h2database:h2")
 	runtimeOnly("mysql:mysql-connector-java")
+	asciidoctor("org.springframework.restdocs:spring-restdocs-asciidoctor")
+	testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
 	testImplementation("org.springframework.security:spring-security-test")
 	testImplementation("io.kotlintest:kotlintest-runner-junit5:3.3.2")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -54,4 +55,28 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+val snippetsDir = file("build/generated-snippets")
+
+tasks {
+	test {
+		outputs.dir(snippetsDir)
+	}
+
+	asciidoctor {
+		inputs.dir(snippetsDir)
+		dependsOn(test)
+	}
+
+	asciidoctor {
+		copy {
+			from("${asciidoctor.get().outputDir}/html5")
+			into("src/main/resources/static/docs")
+		}
+	}
+
+	build {
+		dependsOn(asciidoctor)
+	}
 }
