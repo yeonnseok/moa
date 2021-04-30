@@ -4,7 +4,6 @@ import com.moa.auth.domain.UserPrincipal
 import com.moa.common.ApiResponse
 import com.moa.common.utils.yyyy_MM_dd_Formatter
 import com.moa.record.controller.request.RecordCreateRequest
-import com.moa.record.controller.response.RecordResponse
 import com.moa.record.controller.response.RequestCreateResponse
 import com.moa.record.domain.RecordService
 import com.moa.user.domain.LoginUser
@@ -44,9 +43,9 @@ class RecordController(
         @LoginUser user: UserPrincipal,
         @RequestParam recordDate: String
     ): ResponseEntity<ApiResponse> {
-        val record = recordService.find(user.getId(), recordDate.yyyy_MM_dd_Formatter())
+        val recordResponse = recordService.find(user.getId(), recordDate.yyyy_MM_dd_Formatter())
 
         return ResponseEntity
-            .ok(ApiResponse(data = RecordResponse.of(record)))
+            .ok(ApiResponse(data = recordResponse))
     }
 }

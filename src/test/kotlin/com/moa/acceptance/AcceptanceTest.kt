@@ -3,15 +3,16 @@ package com.moa.acceptance
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.moa.auth.controller.request.LoginRequest
 import com.moa.auth.controller.request.SignupRequest
-import com.moa.auth.controller.response.TokenResponse
 import com.moa.auth.controller.response.SignupResponse
+import com.moa.auth.controller.response.TokenResponse
 import com.moa.common.ApiResponse
 import com.moa.common.ResultType
+import com.moa.record.domain.Description
+import com.moa.record.domain.DescriptionRepository
 import io.kotlintest.shouldBe
 import io.restassured.RestAssured
 import io.restassured.specification.RequestSpecification
 import org.junit.jupiter.api.BeforeEach
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.web.server.LocalServerPort
@@ -25,10 +26,11 @@ import org.springframework.test.context.jdbc.Sql
 @Sql("/truncate.sql")
 abstract class AcceptanceTest {
 
-    protected val log = LoggerFactory.getLogger(javaClass)
-
     @LocalServerPort
     protected var port: Int? = null
+
+    @Autowired
+    private lateinit var descriptionRepository: DescriptionRepository
 
     @Autowired
     protected lateinit var objectMapper: ObjectMapper
@@ -47,8 +49,19 @@ abstract class AcceptanceTest {
             RestAssured.port = port!!
         }
 
+        initDescriptions()
         userId = createUser()
         bearerToken = login()
+    }
+
+    private fun initDescriptions() {
+        descriptionRepository.save(
+            Description(
+                minValue = 36,
+                maxValue = 40,
+                description = "롤러코스터같이 널뛰기하는 기분"
+            )
+        )
     }
 
     private fun createUser(): Long {

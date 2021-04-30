@@ -11,10 +11,11 @@ data class RecordResponse(
     val emotions: List<EmotionResponse>,
     val keywords: Set<Keyword>?,
     val memo: String?,
-    val score: Int = 0
+    val score: Int = 0,
+    val description: String
 ) {
     companion object {
-        fun of(record: Record): RecordResponse {
+        fun of(record: Record, description: String): RecordResponse {
             return RecordResponse(
                 recordId = record.id!!,
                 userId = record.userId,
@@ -22,7 +23,8 @@ data class RecordResponse(
                 emotions = record.emotions.map { EmotionResponse.of(it) },
                 keywords = record.keywords,
                 memo = record.memo,
-                score = record.totalScore()
+                score = record.totalScore(),
+                description = description
             )
         }
     }

@@ -26,6 +26,9 @@ class RecordControllerTest : LoginUserControllerTest() {
     @Autowired
     private lateinit var emotionRepository: EmotionRepository
 
+    @Autowired
+    private lateinit var descriptionRepository: DescriptionRepository
+
     @Test
     fun `데일리 감정 기록 API`() {
         // given
@@ -89,6 +92,13 @@ class RecordControllerTest : LoginUserControllerTest() {
                 count = 10
             )
         )
+        descriptionRepository.save(
+            Description(
+                minValue = 36,
+                maxValue = 40,
+                description = "롤러코스터같이 널뛰기하는 기분"
+            )
+        )
 
         // when
         val result = mockMvc.perform(
@@ -106,6 +116,7 @@ class RecordControllerTest : LoginUserControllerTest() {
             .andExpect(MockMvcResultMatchers.jsonPath("data.recordDate").value("2021-05-05"))
             .andExpect(MockMvcResultMatchers.jsonPath("data.memo").value("first record"))
             .andExpect(MockMvcResultMatchers.jsonPath("data.score").value("40"))
+            .andExpect(MockMvcResultMatchers.jsonPath("data.description").value("롤러코스터같이 널뛰기하는 기분"))
             .andDo(
                 document(
                     "record/find",
@@ -122,7 +133,8 @@ class RecordControllerTest : LoginUserControllerTest() {
                         fieldWithPath("data.emotions[].count").description("갯수"),
                         fieldWithPath("data.keywords[]").description("감정 원인 키워드"),
                         fieldWithPath("data.memo").description("메모"),
-                        fieldWithPath("data.score").description("점수")
+                        fieldWithPath("data.score").description("점수"),
+                        fieldWithPath("data.description").description("대표 감정")
                     )
                 )
             )

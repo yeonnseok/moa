@@ -21,6 +21,12 @@ internal class RecordServiceTest {
     @Autowired
     private lateinit var recordRepository: RecordRepository
 
+    @Autowired
+    private lateinit var descriptionRepository: DescriptionRepository
+
+    @Autowired
+    private lateinit var emotionRepository: EmotionRepository
+
     @Test
     fun `감정 기록 실패 - 당일 기록 존재`() {
         // given
@@ -76,7 +82,14 @@ internal class RecordServiceTest {
     @Test
     fun `감정 기록 조회`() {
         // given
-        recordRepository.save(
+        descriptionRepository.save(
+            Description(
+                minValue = 36,
+                maxValue = 40,
+                description = "롤러코스터같이 널뛰기하는 기분"
+            )
+        )
+        val record = recordRepository.save(
             Record(
                 userId = 1,
                 recordDate = LocalDate.of(2021,5,5),
@@ -84,14 +97,21 @@ internal class RecordServiceTest {
                 memo = "first memo"
             )
         )
+        emotionRepository.save(
+            Emotion(
+                record = record,
+                emotionType = EmotionType.HAPPY,
+                count = 10
+            )
+        )
 
         // when
-        val record = sut.find(1, LocalDate.of(2021,5,5))
+        val result = sut.find(1, LocalDate.of(2021,5,5))
 
         // then
-        record.userId shouldBe 1
-        record.recordDate shouldBe LocalDate.of(2021,5,5)
-        record.keywords shouldBe setOf(Keyword.STUDY, Keyword.MONEY)
-        record.memo shouldBe "first memo"
+        result.userId shouldBe 1
+        result.recordDate shouldBe LocalDate.of(2021,5,5)
+        result.keywords shouldBe setOf(Keyword.STUDY, Keyword.MONEY)
+        result.memo shouldBe "first memo"
     }
 }
