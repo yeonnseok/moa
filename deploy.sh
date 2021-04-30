@@ -7,7 +7,7 @@ APP_NAME=moa
 JAR_NAME=$(ls $REPOSITORY/build/libs/ | grep '.jar' | tail -n 1)
 JAR_PATH=$REPOSITORY/build/libs/$JAR_NAME
 JVM_OPTS="
--Dspring.profiles.active=live
+-Dspring.profiles.active=dev
 -Dspring.config.location=$REPOSITORY/application-oauth.yml,$REPOSITORY/application.yml
 "
 
