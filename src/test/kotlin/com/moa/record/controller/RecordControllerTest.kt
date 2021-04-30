@@ -50,7 +50,7 @@ class RecordControllerTest : LoginUserControllerTest() {
             .andExpect(MockMvcResultMatchers.status().isCreated)
             .andExpect(MockMvcResultMatchers.jsonPath("result").value(ResultType.SUCCESS.name))
             .andExpect(MockMvcResultMatchers.jsonPath("statusCode").value(HttpStatus.CREATED.value()))
-            .andExpect(MockMvcResultMatchers.jsonPath("data.recordId").isNotEmpty())
+            .andExpect(MockMvcResultMatchers.jsonPath("data.recordId").isNotEmpty)
             .andDo(
                 document(
                     "record/create",
@@ -101,8 +101,8 @@ class RecordControllerTest : LoginUserControllerTest() {
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.jsonPath("result").value(ResultType.SUCCESS.name))
             .andExpect(MockMvcResultMatchers.jsonPath("statusCode").value(HttpStatus.OK.value()))
-            .andExpect(MockMvcResultMatchers.jsonPath("data.userId").value(1))
-            .andExpect(MockMvcResultMatchers.jsonPath("data.recordId").value(1))
+            .andExpect(MockMvcResultMatchers.jsonPath("data.userId").isNotEmpty)
+            .andExpect(MockMvcResultMatchers.jsonPath("data.recordId").isNotEmpty)
             .andExpect(MockMvcResultMatchers.jsonPath("data.recordDate").value("2021-05-05"))
             .andExpect(MockMvcResultMatchers.jsonPath("data.memo").value("first record"))
             .andExpect(MockMvcResultMatchers.jsonPath("data.score").value("40"))
