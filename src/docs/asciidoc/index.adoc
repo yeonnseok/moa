@@ -40,3 +40,17 @@ operation::users/me[snippets='http-request,http-response,request-headers,respons
 === 로그인 유저 정보 수정
 
 operation::users/update[snippets='http-request,http-response,request-headers,request-fields']
+
+
+[[resources-users]]
+== 감정 기록 관리
+
+[[resources-user-find]]
+=== 감정 기록 생성
+
+operation::record/create[snippets='http-request,http-response,request-headers,request-fields,response-fields']
+
+[[resources-user-update]]
+=== 감정 기록 조회
+
+operation::record/find[snippets='http-request,http-response,request-parameters,response-fields']

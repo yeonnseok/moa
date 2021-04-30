@@ -29,7 +29,7 @@ class AuthController(
         val userId = userService.create(request)
 
         val location = ServletUriComponentsBuilder
-            .fromCurrentContextPath().path("/user/me")
+            .fromCurrentContextPath().path("/api/v1/user/me")
             .buildAndExpand(userId).toUri()
 
         return ResponseEntity

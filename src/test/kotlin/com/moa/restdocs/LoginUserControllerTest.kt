@@ -1,8 +1,8 @@
-package com.moa.restdocs.common
+package com.moa.restdocs
 
 import com.moa.auth.controller.response.TokenResponse
 import com.moa.common.ApiResponse
-import com.moa.user.domain.Emotion
+import com.moa.record.domain.EmotionType
 import com.moa.user.domain.RoleType
 import com.moa.user.domain.User
 import com.moa.user.domain.UserRepository
@@ -29,7 +29,7 @@ class LoginUserControllerTest : ControllerTest() {
                 nickName = "moa",
                 email = "moa@com",
                 password = passwordEncoder.encode("m123"),
-                profileEmotion = Emotion.HAPPY,
+                profileEmotionType = EmotionType.HAPPY,
                 role = RoleType.ROLE_USER
             )
         )

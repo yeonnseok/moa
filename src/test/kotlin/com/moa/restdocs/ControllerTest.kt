@@ -1,4 +1,4 @@
-package com.moa.restdocs.common
+package com.moa.restdocs
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.kotlintest.specs.AbstractAnnotationSpec.Ignore
