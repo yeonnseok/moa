@@ -97,12 +97,10 @@ class AuthControllerTest : ControllerTest() {
                         headerWithName("Content-Type").description("전송 타입")
                     ),
                     requestFields(
-                        fieldWithPath("nickName").description("닉네임"),
                         fieldWithPath("email").description("이메일"),
                         fieldWithPath("password").description("비밀번호"),
                         fieldWithPath("password2").description("비밀번호 확인"),
-                        fieldWithPath("role").description("권한"),
-                        fieldWithPath("profileEmotion").description("프로필 이모티콘"),
+                        fieldWithPath("role").description("권한")
                     ),
                     responseFields(
                         fieldWithPath("result").description("응답 결과"),

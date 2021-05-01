@@ -54,7 +54,6 @@ class CustomOAuth2UserService(
 
     private fun registerNewUser(oAuth2UserRequest: OAuth2UserRequest, oAuth2UserInfo: OAuth2UserInfo): User {
         val user = User(
-            nickName = oAuth2UserInfo.getNickName(),
             email = oAuth2UserInfo.getEmail(),
             password = oAuth2UserInfo.getOAuthId(),
             role = RoleType.ROLE_USER,
