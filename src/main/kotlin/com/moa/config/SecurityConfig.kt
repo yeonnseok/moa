@@ -1,5 +1,6 @@
 package com.moa.config
 
+import com.google.common.collect.ImmutableList
 import com.moa.auth.domain.CustomOAuth2UserService
 import com.moa.auth.domain.CustomUserDetailsService
 import com.moa.auth.filter.TokenAuthenticationFilter
@@ -101,9 +102,10 @@ class SecurityConfig(
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration()
 
-        configuration.addAllowedOrigin("*")
-        configuration.addAllowedHeader("*")
-        configuration.addAllowedMethod("*")
+        configuration.allowedOrigins = ImmutableList.of("*")
+        configuration.allowedHeaders = ImmutableList.of("Authorization", "Cache-Control", "Content-Type")
+        configuration.allowedMethods = ImmutableList.of("HEAD",
+            "GET", "POST", "PUT", "DELETE", "PATCH")
         configuration.setAllowCredentials(true)
 
         val source = UrlBasedCorsConfigurationSource()
