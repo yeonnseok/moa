@@ -40,15 +40,15 @@ class SecurityConfig(
     override fun authenticationManagerBean() = super.authenticationManagerBean()!!
 
     override fun configure(web: WebSecurity) {
-        web.ignoring().antMatchers(
-            "/docs/**"
-        ).requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+        web.ignoring()
+            .antMatchers("/docs/**")
+            .antMatchers(HttpMethod.OPTIONS, "/**")
+            .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
     }
 
     override fun configure(http: HttpSecurity) {
         http
-            .cors().configurationSource(corsConfigurationSource())
-            .and()
+            .cors().and()
             .csrf().disable()
             .httpBasic().disable()
             .formLogin().disable()
@@ -66,6 +66,7 @@ class SecurityConfig(
             .authorizeRequests()
             .antMatchers("/api/v1/admin/**").hasRole("ADMIN")
             .antMatchers("/api/v1/auth/**", "/login/oauth2/**").permitAll()
+            .antMatchers(HttpMethod.OPTIONS, "/api/**").permitAll()
             .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
             .antMatchers("/").permitAll()
             .anyRequest().authenticated()
@@ -100,7 +101,6 @@ class SecurityConfig(
         configuration.addAllowedHeader("*")
         configuration.addAllowedMethod("*")
         configuration.setAllowCredentials(true)
-        configuration.setMaxAge(3600)
 
         val source = UrlBasedCorsConfigurationSource()
         source.registerCorsConfiguration("/**", configuration)
