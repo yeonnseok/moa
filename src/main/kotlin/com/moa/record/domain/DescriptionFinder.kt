@@ -1,12 +1,12 @@
 package com.moa.record.domain
 
 import com.moa.exceptions.DescriptionNotFoundException
-import org.springframework.stereotype.Service
+import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
-@Service
+@Component
 @Transactional(readOnly = true)
-class DescriptionService(
+class DescriptionFinder(
     private val descriptionRepository: DescriptionRepository
 ) {
     fun find(score: Int): Description {

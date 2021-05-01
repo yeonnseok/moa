@@ -12,7 +12,7 @@ import java.time.LocalDate
 @Service
 @Transactional(readOnly = true)
 class RecordService(
-    private val descriptionService: DescriptionService,
+    private val descriptionFinder: DescriptionFinder,
     private val recordRepository: RecordRepository
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
@@ -45,7 +45,7 @@ class RecordService(
         val record = recordRepository.findByUserIdAndRecordDate(userId, recordDate)
             ?: throw RecordNotFoundException()
 
-        val description = descriptionService.find(record.totalScore())
+        val description = descriptionFinder.find(record.totalScore())
         return RecordResponse.of(record, description.description)
     }
 }

@@ -14,7 +14,7 @@ class JwtTokenProvider(
     @Value("\${security.jwt.token.secret-key:sample}")
     val secretKey: String,
 
-    @Value("\${security.jwt.token.expire-length:300000}")
+    @Value("\${security.jwt.token.expire-length:3000000}")
     val validityInMilliseconds: Long,
 
     private val userDetailsService: CustomUserDetailsService
