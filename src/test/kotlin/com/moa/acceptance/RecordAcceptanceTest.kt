@@ -33,9 +33,18 @@ class RecordAcceptanceTest : AcceptanceTest() {
                 response.statusCode shouldBe HttpStatus.CREATED.value()
             }),
 
-            DynamicTest.dynamicTest("감정 기록 조회하기", {
+            DynamicTest.dynamicTest("일일 감정 기록 조회하기", {
                 // when
                 val response = get("/api/v1/records?recordDate=2021-05-05")
+
+                // then
+                response.result shouldBe ResultType.SUCCESS
+                response.statusCode shouldBe HttpStatus.OK.value()
+            }),
+
+            DynamicTest.dynamicTest("주간 감정 기록 조회하기", {
+                // when
+                val response = get("/api/v1/records?fromDate=2021-05-01&toDate=2021-05-08")
 
                 // then
                 response.result shouldBe ResultType.SUCCESS

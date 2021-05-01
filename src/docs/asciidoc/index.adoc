@@ -64,3 +64,11 @@ operation::record/daily[snippets='http-request,http-response,request-parameters,
 === 주간 감정 기록 조회
 
 operation::record/weekly[snippets='http-request,http-response,request-parameters,response-fields']
+
+[[resources-recommendation]]
+== 추천 컨텐츠 관리
+
+[[resources-recommendation-find]]
+=== 추천 컨텐츠 조회
+
+operation::recommendation/find[snippets='http-request,http-response,request-parameters,response-fields']

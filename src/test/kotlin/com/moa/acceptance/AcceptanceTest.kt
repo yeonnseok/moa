@@ -1,7 +1,6 @@
 package com.moa.acceptance
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.moa.auth.controller.request.LoginRequest
 import com.moa.auth.controller.request.SignupRequest
 import com.moa.auth.controller.response.TokenResponse
 import com.moa.common.ApiResponse
