@@ -20,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.CorsUtils
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 
@@ -65,7 +66,7 @@ class SecurityConfig(
             .authorizeRequests()
             .antMatchers("/api/v1/admin/**").hasRole("ADMIN")
             .antMatchers("/api/v1/auth/**", "/login/oauth2/**").permitAll()
-            .antMatchers(HttpMethod.OPTIONS, "/api/**").permitAll()
+            .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
             .antMatchers("/").permitAll()
             .anyRequest().authenticated()
 
@@ -99,6 +100,7 @@ class SecurityConfig(
         configuration.addAllowedHeader("*")
         configuration.addAllowedMethod("*")
         configuration.setAllowCredentials(true)
+        configuration.setMaxAge(3600)
 
         val source = UrlBasedCorsConfigurationSource()
         source.registerCorsConfiguration("/**", configuration)
