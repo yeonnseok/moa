@@ -73,7 +73,7 @@ class UserControllerTest : LoginUserControllerTest() {
 
         // then
         result
-            .andExpect(MockMvcResultMatchers.status().isNoContent)
+            .andExpect(MockMvcResultMatchers.status().isOk)
             .andDo(
                 MockMvcRestDocumentation.document(
                     "users/update",
@@ -93,6 +93,15 @@ class UserControllerTest : LoginUserControllerTest() {
                         fieldWithPath("onboardingFlag")
                             .optional()
                             .description("온보딩 완료 여부"),
+                    ),
+                    responseFields(
+                        fieldWithPath("result").description("응답 결과"),
+                        fieldWithPath("statusCode").description("상태 코드"),
+                        fieldWithPath("data.nickName").description("닉네임"),
+                        fieldWithPath("data.email").description("이메일"),
+                        fieldWithPath("data.profileEmotion").description("프로필 이모티콘"),
+                        fieldWithPath("data.role").description("권한"),
+                        fieldWithPath("data.onboardingFlag").description("온보딩 완료 여부")
                     )
                 )
             )

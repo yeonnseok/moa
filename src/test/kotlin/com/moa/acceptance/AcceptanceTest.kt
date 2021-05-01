@@ -129,6 +129,6 @@ abstract class AcceptanceTest {
                 patch(path).
         then().
                 log().all().
-                statusCode(HttpStatus.NO_CONTENT.value())
+                statusCode(HttpStatus.OK.value())
     }
 }

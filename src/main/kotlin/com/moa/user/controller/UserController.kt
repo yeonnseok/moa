@@ -29,9 +29,8 @@ class UserController(
         @LoginUser user: UserPrincipal,
         @RequestBody request: UserUpdateRequest
     ): ResponseEntity<ApiResponse> {
-        userService.update(user.getId(), request)
+        val updatedUser = userService.update(user.getId(), request)
         return ResponseEntity
-            .noContent()
-            .build()
+            .ok(ApiResponse(data = UserResponse.of(updatedUser)))
     }
 }
