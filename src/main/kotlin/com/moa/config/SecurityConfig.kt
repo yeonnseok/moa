@@ -10,6 +10,8 @@ import com.moa.auth.security.RestAuthenticationEntryPoint
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.core.Ordered
+import org.springframework.core.annotation.Order
 import org.springframework.http.HttpMethod
 import org.springframework.security.config.BeanIds
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
@@ -97,6 +99,7 @@ class SecurityConfig(
     }
 
 
+    @Order(Ordered.HIGHEST_PRECEDENCE)
     @Bean
     fun corsFilter(): CorsFilter {
         val configuration = CorsConfiguration()
