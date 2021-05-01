@@ -105,9 +105,9 @@ class SecurityConfig(
         val configuration = CorsConfiguration()
 
         configuration.setAllowCredentials(true)
-        configuration.addAllowedOrigin("*");
-        configuration.addAllowedHeader("*");
-        configuration.addAllowedMethod("*");
+        configuration.addAllowedOrigin("http://d31v2zo1o48kb2.cloudfront.net")
+        configuration.addAllowedHeader("*")
+        configuration.addAllowedMethod("*")
 
         val source = UrlBasedCorsConfigurationSource()
         source.registerCorsConfiguration("/**", configuration)
