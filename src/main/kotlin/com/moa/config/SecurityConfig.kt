@@ -52,7 +52,8 @@ class SecurityConfig(
 
     override fun configure(http: HttpSecurity) {
         http
-            .cors().and()
+            .cors().configurationSource(corsConfigurationSource())
+            .and()
             .csrf().disable()
             .httpBasic().disable()
             .formLogin().disable()
@@ -104,9 +105,11 @@ class SecurityConfig(
 
         configuration.allowedOrigins = ImmutableList.of("*")
         configuration.allowedHeaders = ImmutableList.of("Authorization", "Cache-Control", "Content-Type")
-        configuration.allowedMethods = ImmutableList.of("HEAD",
-            "GET", "POST", "PUT", "DELETE", "PATCH")
+        configuration.allowedMethods = ImmutableList.of("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH")
         configuration.setAllowCredentials(true)
+        configuration.addAllowedOrigin("*");
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
 
         val source = UrlBasedCorsConfigurationSource()
         source.registerCorsConfiguration("/**", configuration)
