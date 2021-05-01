@@ -68,12 +68,10 @@ class AuthControllerTest : ControllerTest() {
     fun `회원가입 API`() {
         // given
         val body = mapOf(
-            "nickName" to "moa",
             "email" to "moa@com",
             "password" to "m123",
             "password2" to "m123",
-            "role" to RoleType.ROLE_USER.name,
-            "profileEmotion" to "happy"
+            "role" to RoleType.ROLE_USER.name
         )
 
         // when
