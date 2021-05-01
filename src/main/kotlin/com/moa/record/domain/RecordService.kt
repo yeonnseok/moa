@@ -4,10 +4,13 @@ import com.moa.exceptions.RecordExistedSameDayException
 import com.moa.exceptions.RecordNotFoundException
 import com.moa.record.controller.request.RecordCreateRequest
 import com.moa.record.controller.response.RecordResponse
+import com.moa.record.controller.response.RecordResponses
+import com.moa.record.controller.response.SimpleRecordResponse
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
+import kotlin.math.roundToInt
 
 @Service
 @Transactional(readOnly = true)
@@ -15,7 +18,7 @@ class RecordService(
     private val descriptionFinder: DescriptionFinder,
     private val recordRepository: RecordRepository
 ) {
-    private val log = LoggerFactory.getLogger(javaClass)
+    private val numberOfWeekDay = 7
 
     @Transactional
     fun create(userId: Long, request: RecordCreateRequest): Long {
@@ -41,11 +44,34 @@ class RecordService(
         return keywords?.map { Keyword.of(it) }?.toSet()
     }
 
-    fun find(userId: Long, recordDate: LocalDate): RecordResponse {
+    fun findDaily(userId: Long, recordDate: LocalDate): RecordResponse {
         val record = recordRepository.findByUserIdAndRecordDate(userId, recordDate)
             ?: throw RecordNotFoundException()
 
         val description = descriptionFinder.find(record.totalScore())
         return RecordResponse.of(record, description.description)
     }
+
+    fun findWeekly(userId: Long, fromDate: LocalDate, toDate: LocalDate): RecordResponses {
+        val records = recordRepository.findByUserIdAndRecordDateGreaterThanEqualAndRecordDateLessThanEqual(
+            userId = userId,
+            fromDate = fromDate,
+            toDate = toDate
+        )
+
+        val averageScore = calcAverageScore(records)
+
+        return RecordResponses(
+            averageScore = averageScore,
+            records = records.map { SimpleRecordResponse.of(it) }
+        )
+    }
+
+    private fun calcAverageScore(records: List<Record>) =
+        records.map { it.totalScore() }
+            .sum()
+            .toDouble()
+            .div(numberOfWeekDay)
+            .roundToInt()
+
 }

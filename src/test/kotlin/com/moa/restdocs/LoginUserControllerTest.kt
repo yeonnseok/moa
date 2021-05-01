@@ -22,9 +22,11 @@ class LoginUserControllerTest : ControllerTest() {
 
     protected var token: String? = null
 
+    protected var userId: Long? = null
+
     @BeforeEach
     fun setUp() {
-        userRepository.save(
+        val user = userRepository.save(
             User(
                 nickName = "moa",
                 email = "moa@com",
@@ -33,6 +35,7 @@ class LoginUserControllerTest : ControllerTest() {
                 role = RoleType.ROLE_USER
             )
         )
+        userId = user.id
 
         val body = mapOf(
             "email" to "moa@com",

@@ -455,17 +455,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#resources-record">감정 기록 관리</a>
 <ul class="sectlevel2">
-<li><a href="#resources-record-find">감정 기록 생성</a></li>
-<li><a href="#resources-record-update">감정 기록 조회</a></li>
-</ul>
-</li>
-<li><a href="#resources-description">대표 감정 관리</a></li>
-<li><a href="#resources-description-find">대표 감정 문장 조회</a>
-<ul class="sectlevel2">
-<li><a href="#resources-description-find_http_request">Example Request</a></li>
-<li><a href="#resources-description-find_http_response">Example Response</a></li>
-<li><a href="#resources-description-find_request_parameters">Request parameters</a></li>
-<li><a href="#resources-description-find_response_fields">Response fields</a></li>
+<li><a href="#resources-record-create">감정 기록 생성</a></li>
+<li><a href="#resources-record-daily">일일 감정 기록 조회</a></li>
+<li><a href="#resources-record-weekly">주간 감정 기록 조회</a></li>
 </ul>
 </li>
 </ul>
@@ -646,7 +638,7 @@ Content-Length: 252
   "result" : "SUCCESS",
   "statusCode" : 201,
   "data" : {
-    "token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZSI6eyJhdXRob3JpdHkiOiJST0xFX1VTRVIifSwiaWF0IjoxNjE5ODUwMzc2LCJleHAiOjE2MjA3MTQzNzZ9.u-MLzbn7W4KD6sJiI1QCVKgCRup8Ul9LpT8HLCd_Spo"
+    "token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZSI6eyJhdXRob3JpdHkiOiJST0xFX1VTRVIifSwiaWF0IjoxNjE5ODg4OTA1LCJleHAiOjE2MjA3NTI5MDV9.QR8fZELNMvKyL17tgy9dNP50zI-KJn0fk8jO3nBtWeI"
   }
 }</code></pre>
 </div>
@@ -793,7 +785,7 @@ Content-Length: 252
   "result" : "SUCCESS",
   "statusCode" : 200,
   "data" : {
-    "token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwicm9sZSI6eyJhdXRob3JpdHkiOiJST0xFX1VTRVIifSwiaWF0IjoxNjE5ODUwMzc3LCJleHAiOjE2MjA3MTQzNzd9.t_tn7KCg8mH5I_pLq1gq2fmouHByW1YKDytNpEvYF_E"
+    "token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwicm9sZSI6eyJhdXRob3JpdHkiOiJST0xFX1VTRVIifSwiaWF0IjoxNjE5ODg4OTA1LCJleHAiOjE2MjA3NTI5MDV9.p0TQ-NYo7cQQfVKLyQ0Tse85PB2dxpRkvYT7YdZgRkc"
   }
 }</code></pre>
 </div>
@@ -900,7 +892,7 @@ Content-Length: 252
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/users/me HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZSI6eyJhdXRob3JpdHkiOiJST0xFX1VTRVIifSwiaWF0IjoxNjE5ODUwMzU3LCJleHAiOjE2MjA3MTQzNTd9.JMhzKlMGAK3bab8nHw2Jrp6L7sm7_mXvMQAzLVvAeiQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZSI6eyJhdXRob3JpdHkiOiJST0xFX1VTRVIifSwiaWF0IjoxNjE5ODg4ODg3LCJleHAiOjE2MjA3NTI4ODd9.0JhDtOVzzeyZEZTjg5K33ASHi_cwXs3h_aPYwGSEZkM
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -1020,7 +1012,7 @@ Content-Length: 202
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PATCH /api/v1/users/me HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwicm9sZSI6eyJhdXRob3JpdHkiOiJST0xFX1VTRVIifSwiaWF0IjoxNjE5ODUwMzU5LCJleHAiOjE2MjA3MTQzNTl9.IUK-s9sNwlLN4coiBKcpokljjTT4mzLGq6_vHxL8WEk
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwicm9sZSI6eyJhdXRob3JpdHkiOiJST0xFX1VTRVIifSwiaWF0IjoxNjE5ODg4ODg3LCJleHAiOjE2MjA3NTI4ODd9.CXf5DkxkhTynyz5g1jnTC5i_8qU2q_lmvOFptH3k7NM
 Accept: application/json
 Content-Length: 112
 Host: localhost:8080
@@ -1138,14 +1130,14 @@ Content-Length: 209
 <h2 id="resources-record"><a class="link" href="#resources-record">감정 기록 관리</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="resources-record-find"><a class="link" href="#resources-record-find">감정 기록 생성</a></h3>
+<h3 id="resources-record-create"><a class="link" href="#resources-record-create">감정 기록 생성</a></h3>
 <div class="sect3">
-<h4 id="resources-record-find_http_request"><a class="link" href="#resources-record-find_http_request">Example Request</a></h4>
+<h4 id="resources-record-create_http_request"><a class="link" href="#resources-record-create_http_request">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/records HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwicm9sZSI6eyJhdXRob3JpdHkiOiJST0xFX1VTRVIifSwiaWF0IjoxNjE5ODUwMzUwLCJleHAiOjE2MjA3MTQzNTB9.LMyMZod4aPufQV9o7JBLx-6MUAQrRDFMKwfuDlnUtzo
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZSI6eyJhdXRob3JpdHkiOiJST0xFX1VTRVIifSwiaWF0IjoxNjE5ODg4ODgzLCJleHAiOjE2MjA3NTI4ODN9.PjqhDbBBlmBRTYEyZnLuPfLd7xH4PE_wYpTHAt2vge4
 Accept: application/json
 Content-Length: 136
 Host: localhost:8080
@@ -1162,7 +1154,7 @@ Host: localhost:8080
 </div>
 </div>
 <div class="sect3">
-<h4 id="resources-record-find_http_response"><a class="link" href="#resources-record-find_http_response">Example Response</a></h4>
+<h4 id="resources-record-create_http_response"><a class="link" href="#resources-record-create_http_response">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
@@ -1190,7 +1182,7 @@ Content-Length: 85
 </div>
 </div>
 <div class="sect3">
-<h4 id="resources-record-find_request_headers"><a class="link" href="#resources-record-find_request_headers">Request headers</a></h4>
+<h4 id="resources-record-create_request_headers"><a class="link" href="#resources-record-create_request_headers">Request headers</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -1211,7 +1203,7 @@ Content-Length: 85
 </table>
 </div>
 <div class="sect3">
-<h4 id="resources-record-find_request_fields"><a class="link" href="#resources-record-find_request_fields">Request fields</a></h4>
+<h4 id="resources-record-create_request_fields"><a class="link" href="#resources-record-create_request_fields">Request fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -1256,7 +1248,7 @@ Content-Length: 85
 </table>
 </div>
 <div class="sect3">
-<h4 id="resources-record-find_response_fields"><a class="link" href="#resources-record-find_response_fields">Response fields</a></h4>
+<h4 id="resources-record-create_response_fields"><a class="link" href="#resources-record-create_response_fields">Response fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -1291,19 +1283,19 @@ Content-Length: 85
 </div>
 </div>
 <div class="sect2">
-<h3 id="resources-record-update"><a class="link" href="#resources-record-update">감정 기록 조회</a></h3>
+<h3 id="resources-record-daily"><a class="link" href="#resources-record-daily">일일 감정 기록 조회</a></h3>
 <div class="sect3">
-<h4 id="resources-record-update_http_request"><a class="link" href="#resources-record-update_http_request">Example Request</a></h4>
+<h4 id="resources-record-daily_http_request"><a class="link" href="#resources-record-daily_http_request">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/records?recordDate=2021-05-05 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZSI6eyJhdXRob3JpdHkiOiJST0xFX1VTRVIifSwiaWF0IjoxNjE5ODUwMzQ3LCJleHAiOjE2MjA3MTQzNDd9.TD3nL1D1M8V3QcFjRc0sGjVYwiMYTrUSNh8JN5--TYE
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwicm9sZSI6eyJhdXRob3JpdHkiOiJST0xFX1VTRVIifSwiaWF0IjoxNjE5ODg4ODgyLCJleHAiOjE2MjA3NTI4ODJ9.5L7C9cRNQCsn5FcfQSq5475My7s1Klfr_Ew2nGQOR10
 Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="resources-record-update_http_response"><a class="link" href="#resources-record-update_http_response">Example Response</a></h4>
+<h4 id="resources-record-daily_http_response"><a class="link" href="#resources-record-daily_http_response">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -1324,13 +1316,13 @@ Content-Length: 370
   "statusCode" : 200,
   "data" : {
     "recordId" : 1,
-    "userId" : 1,
+    "userId" : 2,
     "recordDate" : "2021-05-05",
     "emotions" : [ {
       "emotionType" : "HAPPY",
       "count" : 10
     } ],
-    "keywords" : [ "STUDY", "MONEY" ],
+    "keywords" : [ "MONEY", "STUDY" ],
     "memo" : "first record",
     "score" : 40,
     "description" : "롤러코스터같이 널뛰기하는 기분"
@@ -1340,7 +1332,7 @@ Content-Length: 370
 </div>
 </div>
 <div class="sect3">
-<h4 id="resources-record-update_request_parameters"><a class="link" href="#resources-record-update_request_parameters">Request parameters</a></h4>
+<h4 id="resources-record-daily_request_parameters"><a class="link" href="#resources-record-daily_request_parameters">Request parameters</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -1361,7 +1353,7 @@ Content-Length: 370
 </table>
 </div>
 <div class="sect3">
-<h4 id="resources-record-update_response_fields"><a class="link" href="#resources-record-update_response_fields">Response fields</a></h4>
+<h4 id="resources-record-daily_response_fields"><a class="link" href="#resources-record-daily_response_fields">Response fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -1424,7 +1416,7 @@ Content-Length: 370
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.score</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">점수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">온도</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.description</code></p></td>
@@ -1435,29 +1427,20 @@ Content-Length: 370
 </table>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="resources-description"><a class="link" href="#resources-description">대표 감정 관리</a></h2>
-<div class="sectionbody">
-
-</div>
-</div>
-<div class="sect1">
-<h2 id="resources-description-find"><a class="link" href="#resources-description-find">대표 감정 문장 조회</a></h2>
-<div class="sectionbody">
 <div class="sect2">
-<h3 id="resources-description-find_http_request"><a class="link" href="#resources-description-find_http_request">Example Request</a></h3>
+<h3 id="resources-record-weekly"><a class="link" href="#resources-record-weekly">주간 감정 기록 조회</a></h3>
+<div class="sect3">
+<h4 id="resources-record-weekly_http_request"><a class="link" href="#resources-record-weekly_http_request">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/descriptions?score=40 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZSI6eyJhdXRob3JpdHkiOiJST0xFX1VTRVIifSwiaWF0IjoxNjE5ODUwMzUxLCJleHAiOjE2MjA3MTQzNTF9.0npd2T6YKcL-jGlYL7r25RoTXkg-YJVUgAqfYgEjeH4
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/records?fromDate=2021-05-01&amp;toDate=2021-05-08 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZSI6eyJhdXRob3JpdHkiOiJST0xFX1VTRVIifSwiaWF0IjoxNjE5ODg4ODgwLCJleHAiOjE2MjA3NTI4ODB9.-62O8czF6qKYWxSJ2RFwH7mOq5LkI5nYYiC-XofLHKM
 Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="resources-description-find_http_response"><a class="link" href="#resources-description-find_http_response">Example Response</a></h3>
+<div class="sect3">
+<h4 id="resources-record-weekly_http_response"><a class="link" href="#resources-record-weekly_http_response">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -1471,20 +1454,29 @@ Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
-Content-Length: 133
+Content-Length: 279
 
 {
   "result" : "SUCCESS",
   "statusCode" : 200,
   "data" : {
-    "description" : "롤러코스터같이 널뛰기하는 기분"
+    "averageScore" : 8,
+    "records" : [ {
+      "recordId" : 1,
+      "recordDate" : "2021-05-06",
+      "score" : 40
+    }, {
+      "recordId" : 2,
+      "recordDate" : "2021-05-07",
+      "score" : 15
+    } ]
   }
 }</code></pre>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="resources-description-find_request_parameters"><a class="link" href="#resources-description-find_request_parameters">Request parameters</a></h3>
+<div class="sect3">
+<h4 id="resources-record-weekly_request_parameters"><a class="link" href="#resources-record-weekly_request_parameters">Request parameters</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -1498,14 +1490,18 @@ Content-Length: 133
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>score</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">온도 점수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fromDate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">시작 날짜</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>toDate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">끝 날짜</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="sect2">
-<h3 id="resources-description-find_response_fields"><a class="link" href="#resources-description-find_response_fields">Response fields</a></h3>
+<div class="sect3">
+<h4 id="resources-record-weekly_response_fields"><a class="link" href="#resources-record-weekly_response_fields">Response fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -1531,9 +1527,24 @@ Content-Length: 133
 <td class="tableblock halign-left valign-top"><p class="tableblock">결과 코드</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.description</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.averageScore</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">평균 온도</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.records[].recordId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">기록 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.records[].recordDate</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대표 감정</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">기록 날짜</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.records[].score</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">온도</p></td>
 </tr>
 </tbody>
 </table>
@@ -1541,10 +1552,11 @@ Content-Length: 133
 </div>
 </div>
 </div>
+</div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2021-05-01 15:16:15 +0900
+Last updated 2021-05-02 02:04:50 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css">

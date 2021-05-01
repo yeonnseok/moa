@@ -5,7 +5,9 @@ import java.time.LocalDate
 
 interface RecordRepository : JpaRepository<Record, Long> {
 
+    fun existsByUserIdAndRecordDate(userId: Long, recordDate: LocalDate): Boolean
+
     fun findByUserIdAndRecordDate(userId: Long, recordDate: LocalDate): Record?
 
-    fun existsByUserIdAndRecordDate(userId: Long, recordDate: LocalDate): Boolean
+    fun findByUserIdAndRecordDateGreaterThanEqualAndRecordDateLessThanEqual(userId: Long, fromDate: LocalDate, toDate: LocalDate): List<Record>
 }

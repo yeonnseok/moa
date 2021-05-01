@@ -73,7 +73,7 @@ internal class RecordServiceTest {
     @Test
     fun `감정 기록 조회 실패 - 해당 날에 기록 없음`() {
         // when
-        val response = shouldThrow<RecordNotFoundException> { sut.find(1, LocalDate.of(2021,5,5)) }
+        val response = shouldThrow<RecordNotFoundException> { sut.findDaily(1, LocalDate.of(2021,5,5)) }
 
         // then
         response.message shouldBe "감정 기록이 존재하지 않습니다."
@@ -106,7 +106,7 @@ internal class RecordServiceTest {
         )
 
         // when
-        val result = sut.find(1, LocalDate.of(2021,5,5))
+        val result = sut.findDaily(1, LocalDate.of(2021,5,5))
 
         // then
         result.userId shouldBe 1

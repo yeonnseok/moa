@@ -76,10 +76,10 @@ class RecordControllerTest : LoginUserControllerTest() {
     }
 
     @Test
-    fun `감정 기록 조회 API`() {
+    fun `데일리 감정 기록 조회 API`() {
         // given
         val record = Record(
-            userId = 1,
+            userId = userId!!,
             recordDate = LocalDate.of(2021, 5, 5),
             keywords = setOf(Keyword.STUDY, Keyword.MONEY),
             memo = "first record"
@@ -119,7 +119,7 @@ class RecordControllerTest : LoginUserControllerTest() {
             .andExpect(MockMvcResultMatchers.jsonPath("data.description").value("롤러코스터같이 널뛰기하는 기분"))
             .andDo(
                 document(
-                    "record/find",
+                    "record/daily",
                     requestParameters(
                         parameterWithName("recordDate").description("조회 기록 날짜")
                     ),
@@ -133,8 +133,80 @@ class RecordControllerTest : LoginUserControllerTest() {
                         fieldWithPath("data.emotions[].count").description("갯수"),
                         fieldWithPath("data.keywords[]").description("감정 원인 키워드"),
                         fieldWithPath("data.memo").description("메모"),
-                        fieldWithPath("data.score").description("점수"),
+                        fieldWithPath("data.score").description("온도"),
                         fieldWithPath("data.description").description("대표 감정")
+                    )
+                )
+            )
+    }
+
+    @Test
+    fun `주간 감정 기록 조회 API`() {
+        // given
+        val record1 = Record(
+            userId = userId!!,
+            recordDate = LocalDate.of(2021, 5, 6),
+            keywords = setOf(Keyword.STUDY, Keyword.MONEY),
+            memo = "first record"
+        )
+        val record2 = Record(
+            userId = userId!!,
+            recordDate = LocalDate.of(2021, 5, 7),
+            keywords = setOf(Keyword.FAMILY, Keyword.FRIEND),
+            memo = "second record"
+        )
+        recordRepository.saveAll(listOf(record1, record2))
+        emotionRepository.saveAll(listOf(
+            Emotion(
+                record = record1,
+                emotionType = EmotionType.HAPPY,
+                count = 10
+            ),
+            Emotion(
+                record = record2,
+                emotionType = EmotionType.EXCITED,
+                count = 5
+            )
+        ))
+        descriptionRepository.saveAll(listOf(
+            Description(
+                minValue = 14,
+                maxValue = 16,
+                description = "산뜻하고 행복한 기분"
+            ),
+            Description(
+                minValue = 36,
+                maxValue = 40,
+                description = "롤러코스터같이 널뛰기하는 기분"
+            )
+        ))
+
+        // when
+        val result = mockMvc.perform(
+            get("/api/v1/records?fromDate=2021-05-01&toDate=2021-05-08")
+                .header("Authorization", "Bearer $token")
+        )
+
+        // then
+        result
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.jsonPath("result").value(ResultType.SUCCESS.name))
+            .andExpect(MockMvcResultMatchers.jsonPath("statusCode").value(HttpStatus.OK.value()))
+            .andExpect(MockMvcResultMatchers.jsonPath("data.averageScore").value(8))
+            .andDo(
+                document(
+                    "record/weekly",
+                    requestParameters(
+                        parameterWithName("fromDate").description("시작 날짜"),
+                        parameterWithName("toDate").description("끝 날짜")
+                    ),
+                    responseFields(
+                        fieldWithPath("result").description("응답 결과"),
+                        fieldWithPath("statusCode").description("결과 코드"),
+                        fieldWithPath("data.averageScore").description("평균 온도"),
+                        fieldWithPath("data.records[].recordId").description("기록 ID"),
+                        fieldWithPath("data.records[].recordDate").description("기록 날짜"),
+                        fieldWithPath("data.records[].score").description("온도"),
                     )
                 )
             )

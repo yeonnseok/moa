@@ -38,14 +38,30 @@ class RecordController(
             )
     }
 
-    @GetMapping
-    fun find(
+    @GetMapping(params = ["recordDate"])
+    fun findDaily(
         @LoginUser user: UserPrincipal,
         @RequestParam recordDate: String
     ): ResponseEntity<ApiResponse> {
-        val recordResponse = recordService.find(user.getId(), recordDate.yyyy_MM_dd_Formatter())
+        val recordResponse = recordService.findDaily(user.getId(), recordDate.yyyy_MM_dd_Formatter())
 
         return ResponseEntity
             .ok(ApiResponse(data = recordResponse))
+    }
+
+    @GetMapping(params = ["fromDate", "toDate"])
+    fun findWeekly(
+        @LoginUser user: UserPrincipal,
+        @RequestParam fromDate: String,
+        @RequestParam toDate: String
+    ): ResponseEntity<ApiResponse> {
+        val recordResponses = recordService.findWeekly(
+            userId = user.getId(),
+            fromDate = fromDate.yyyy_MM_dd_Formatter(),
+            toDate = toDate.yyyy_MM_dd_Formatter()
+        )
+
+        return ResponseEntity
+            .ok(ApiResponse(data = recordResponses))
     }
 }

@@ -50,20 +50,17 @@ operation::users/update[snippets='http-request,http-response,request-headers,req
 [[resources-record]]
 == 감정 기록 관리
 
-[[resources-record-find]]
+[[resources-record-create]]
 === 감정 기록 생성
 
 operation::record/create[snippets='http-request,http-response,request-headers,request-fields,response-fields']
 
-[[resources-record-update]]
-=== 감정 기록 조회
+[[resources-record-daily]]
+=== 일일 감정 기록 조회
 
-operation::record/find[snippets='http-request,http-response,request-parameters,response-fields']
+operation::record/daily[snippets='http-request,http-response,request-parameters,response-fields']
 
-[[resources-description]]
-== 대표 감정 관리
+[[resources-record-weekly]]
+=== 주간 감정 기록 조회
 
-[[resources-description-find]]
-=== 대표 감정 문장 조회
-
-operation::description/find[snippets='http-request,http-response,request-parameters,response-fields']
+operation::record/weekly[snippets='http-request,http-response,request-parameters,response-fields']
