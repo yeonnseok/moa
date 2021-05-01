@@ -3,7 +3,10 @@ package com.moa.config
 import com.moa.auth.domain.CustomOAuth2UserService
 import com.moa.auth.domain.CustomUserDetailsService
 import com.moa.auth.filter.TokenAuthenticationFilter
-import com.moa.auth.security.*
+import com.moa.auth.security.HttpCookieOAuth2AuthorizationRequestRepository
+import com.moa.auth.security.Oauth2AuthenticationFailureHandler
+import com.moa.auth.security.Oauth2AuthenticationSuccessHandler
+import com.moa.auth.security.RestAuthenticationEntryPoint
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -92,6 +95,7 @@ class SecurityConfig(
         auth.userDetailsService(customUserDetailsService)
             .passwordEncoder(passwordEncoder())
     }
+
 
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
