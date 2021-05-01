@@ -4,7 +4,7 @@ import com.moa.user.domain.RoleType
 import com.moa.user.domain.User
 
 data class UserResponse(
-    val nickName: String,
+    val nickName: String?,
     val email: String,
     val profileEmotion: String?,
     val role: RoleType,

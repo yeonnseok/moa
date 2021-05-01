@@ -16,6 +16,11 @@ endif::[]
 [[resources-auth]]
 == 회원가입/로그인
 
+[[resources-auth-email]]
+=== 이메일 체크
+
+operation::auth/email[snippets='http-request,http-response,request-headers,request-fields,response-fields']
+
 [[resources-auth-signup]]
 === 회원가입
 
