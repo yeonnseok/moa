@@ -64,6 +64,6 @@ operation::record/find[snippets='http-request,http-response,request-parameters,r
 == 대표 감정 관리
 
 [[resources-description-find]]
-== 대표 감정 문장 조회
+=== 대표 감정 문장 조회
 
 operation::description/find[snippets='http-request,http-response,request-parameters,response-fields']
