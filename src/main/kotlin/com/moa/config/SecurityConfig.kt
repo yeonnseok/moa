@@ -42,7 +42,7 @@ class SecurityConfig(
 
     override fun configure(http: HttpSecurity) {
         http
-            .cors().and()
+            .cors().disable()
             .csrf().disable()
             .httpBasic().disable()
             .formLogin().disable()
