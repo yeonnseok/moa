@@ -1,6 +1,5 @@
 package com.moa.config
 
-import com.google.common.collect.ImmutableList
 import com.moa.auth.domain.CustomOAuth2UserService
 import com.moa.auth.domain.CustomUserDetailsService
 import com.moa.auth.filter.TokenAuthenticationFilter
@@ -23,9 +22,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.web.cors.CorsConfiguration
-import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.CorsUtils
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
+import org.springframework.web.filter.CorsFilter
 
 
 @Configuration
@@ -52,8 +51,7 @@ class SecurityConfig(
 
     override fun configure(http: HttpSecurity) {
         http
-            .cors().configurationSource(corsConfigurationSource())
-            .and()
+            .cors().and()
             .csrf().disable()
             .httpBasic().disable()
             .formLogin().disable()
@@ -100,12 +98,9 @@ class SecurityConfig(
 
 
     @Bean
-    fun corsConfigurationSource(): CorsConfigurationSource {
+    fun corsFilter(): CorsFilter {
         val configuration = CorsConfiguration()
 
-        configuration.allowedOrigins = ImmutableList.of("*")
-        configuration.allowedHeaders = ImmutableList.of("Authorization", "Cache-Control", "Content-Type")
-        configuration.allowedMethods = ImmutableList.of("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH")
         configuration.setAllowCredentials(true)
         configuration.addAllowedOrigin("*");
         configuration.addAllowedHeader("*");
@@ -113,7 +108,7 @@ class SecurityConfig(
 
         val source = UrlBasedCorsConfigurationSource()
         source.registerCorsConfiguration("/**", configuration)
-        return source
+        return CorsFilter(source)
     }
 
     @Bean
