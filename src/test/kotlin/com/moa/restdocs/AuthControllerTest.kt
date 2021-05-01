@@ -87,7 +87,7 @@ class AuthControllerTest : ControllerTest() {
             .andExpect(status().isCreated)
             .andExpect(jsonPath("result").value(ResultType.SUCCESS.name))
             .andExpect(jsonPath("statusCode").value(HttpStatus.CREATED.value()))
-            .andExpect(jsonPath("data.userId").value(1))
+            .andExpect(jsonPath("data.token").isNotEmpty)
             .andDo(
                 document(
                     "auth/signup",
@@ -103,7 +103,7 @@ class AuthControllerTest : ControllerTest() {
                     responseFields(
                         fieldWithPath("result").description("응답 결과"),
                         fieldWithPath("statusCode").description("결과 코드"),
-                        fieldWithPath("data.userId").description("유저 ID"))
+                        fieldWithPath("data.token").description("JWT 토큰"))
                     )
                 )
     }
