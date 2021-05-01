@@ -1,6 +1,5 @@
 package com.moa.record.domain
 
-import com.moa.exceptions.DescriptionNotFoundException
 import com.moa.exceptions.RecordExistedSameDayException
 import com.moa.exceptions.RecordNotFoundException
 import com.moa.record.controller.request.RecordCreateRequest
@@ -13,8 +12,8 @@ import java.time.LocalDate
 @Service
 @Transactional(readOnly = true)
 class RecordService(
-    private val recordRepository: RecordRepository,
-    private val descriptionRepository: DescriptionRepository
+    private val descriptionService: DescriptionService,
+    private val recordRepository: RecordRepository
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -46,12 +45,7 @@ class RecordService(
         val record = recordRepository.findByUserIdAndRecordDate(userId, recordDate)
             ?: throw RecordNotFoundException()
 
-        val score = record.totalScore()
-        log.info("total score : $score")
-        val description =
-            descriptionRepository.findByMaxValueGreaterThanEqualAndMinValueLessThanEqual(score, score)
-                .randomOrNull() ?: throw DescriptionNotFoundException()
-
+        val description = descriptionService.find(record.totalScore())
         return RecordResponse.of(record, description.description)
     }
 }

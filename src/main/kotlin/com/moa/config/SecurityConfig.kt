@@ -7,6 +7,7 @@ import com.moa.auth.security.*
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.BeanIds
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -64,6 +65,7 @@ class SecurityConfig(
             .authorizeRequests()
             .antMatchers("/api/v1/admin/**").hasRole("ADMIN")
             .antMatchers("/api/v1/auth/**", "/login/oauth2/**").permitAll()
+            .antMatchers(HttpMethod.OPTIONS, "/api/**").permitAll()
             .antMatchers("/").permitAll()
             .anyRequest().authenticated()
 
