@@ -13,9 +13,10 @@ class DescriptionControllerTest : LoginUserControllerTest() {
 
     @Test
     fun `대표 감정 API`() {
+
         // when
         val result = mockMvc.perform(
-            MockMvcRequestBuilders.get("/api/v1/records?recordDate=2021-05-05")
+            MockMvcRequestBuilders.get("/api/v1/descriptions?score=40")
                 .header("Authorization", "Bearer $token")
         )
     }

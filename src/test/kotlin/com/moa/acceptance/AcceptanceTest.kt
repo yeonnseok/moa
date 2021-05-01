@@ -3,7 +3,6 @@ package com.moa.acceptance
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.moa.auth.controller.request.LoginRequest
 import com.moa.auth.controller.request.SignupRequest
-import com.moa.auth.controller.response.SignupResponse
 import com.moa.auth.controller.response.TokenResponse
 import com.moa.common.ApiResponse
 import com.moa.common.ResultType
@@ -50,8 +49,7 @@ abstract class AcceptanceTest {
         }
 
         initDescriptions()
-        userId = createUser()
-        bearerToken = login()
+        bearerToken = createUser()
     }
 
     private fun initDescriptions() {
@@ -64,25 +62,13 @@ abstract class AcceptanceTest {
         )
     }
 
-    private fun createUser(): Long {
+    private fun createUser(): String {
         val request = SignupRequest("moa@com", "m123", "m123", "ROLE_USER")
 
         val response = post("/api/v1/auth/signup", request)
 
         response.result shouldBe ResultType.SUCCESS
         response.statusCode shouldBe HttpStatus.CREATED.value()
-
-        val signupResponse = getResponseData(response.data, SignupResponse::class.java) as SignupResponse
-        return signupResponse.userId
-    }
-
-    private fun login(): String {
-        val request = LoginRequest("moa@com", "m123")
-
-        val response = login("/api/v1/auth/login", request)
-
-        response.result shouldBe ResultType.SUCCESS
-        response.statusCode shouldBe HttpStatus.OK.value()
 
         val tokenResponse = getResponseData(response.data, TokenResponse::class.java) as TokenResponse
         return tokenResponse.token
