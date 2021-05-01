@@ -1,10 +1,12 @@
 package com.moa.auth.controller
 
+import com.moa.auth.controller.request.EmailCheckRequest
 import com.moa.auth.controller.request.LoginRequest
 import com.moa.auth.controller.response.TokenResponse
 import com.moa.auth.controller.response.SignupResponse
 import com.moa.common.ApiResponse
 import com.moa.auth.controller.request.SignupRequest
+import com.moa.auth.controller.response.EmailCheckResponse
 import com.moa.auth.security.JwtTokenProvider
 import com.moa.user.domain.UserService
 import org.springframework.http.HttpStatus
@@ -24,6 +26,13 @@ class AuthController(
     private val jwtTokenProvider: JwtTokenProvider,
     private val userService: UserService
 ) {
+    @PostMapping("/check")
+    fun check(@RequestBody request: EmailCheckRequest): ResponseEntity<ApiResponse> {
+        val result = userService.checkEmail(request)
+        return ResponseEntity
+            .ok(ApiResponse(data =  EmailCheckResponse(result)))
+    }
+
     @PostMapping("/signup")
     fun signup(@Valid @RequestBody request: SignupRequest): ResponseEntity<ApiResponse> {
         val userId = userService.create(request)

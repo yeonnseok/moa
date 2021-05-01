@@ -27,6 +27,44 @@ class AuthControllerTest : ControllerTest() {
     private lateinit var passwordEncoder: PasswordEncoder
 
     @Test
+    fun `Email 확인 API`() {
+        // given
+        val body = mapOf(
+            "email" to "moa@com"
+        )
+
+        // when
+        val result = mockMvc.perform(
+            post("/api/v1/auth/check")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsBytes(body))
+        )
+
+        // then
+        result
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("result").value(ResultType.SUCCESS.name))
+            .andExpect(jsonPath("statusCode").value(HttpStatus.OK.value()))
+            .andExpect(jsonPath("data.existed").value(false))
+            .andDo(
+                document(
+                    "auth/email",
+                    requestHeaders(
+                        headerWithName("Content-Type").description("전송 타입")
+                    ),
+                    requestFields(
+                        fieldWithPath("email").description("이메일"),
+                    ),
+                    responseFields(
+                        fieldWithPath("result").description("응답 결과"),
+                        fieldWithPath("statusCode").description("결과 코드"),
+                        fieldWithPath("data.existed").description("이메일 중복 여부"))
+                )
+            )
+    }
+
+    @Test
     fun `회원가입 API`() {
         // given
         val body = mapOf(

@@ -1,5 +1,6 @@
 package com.moa.user.domain
 
+import com.moa.auth.controller.request.EmailCheckRequest
 import com.moa.auth.controller.request.SignupRequest
 import com.moa.exceptions.EmailDuplicatedException
 import com.moa.exceptions.PasswordNotEqualException
@@ -63,5 +64,9 @@ class UserService(
         }
 
         return user
+    }
+
+    fun checkEmail(request: EmailCheckRequest): Boolean {
+        return userRepository.existsByEmail(request.email)
     }
 }

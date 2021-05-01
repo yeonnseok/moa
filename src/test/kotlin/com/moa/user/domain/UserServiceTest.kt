@@ -31,12 +31,10 @@ internal class UserServiceTest {
     fun `유저 생성 실패 - 비밀번호 확인`() {
         // given
         val request = SignupRequest(
-            nickName = "moa",
             email = "moa@com",
             password = "m123",
             password2 = "m111",
-            role = "ROLE_USER",
-            profileEmotion = "happy"
+            role = "ROLE_USER"
         )
 
         // when
@@ -59,12 +57,10 @@ internal class UserServiceTest {
         )
 
         val request = SignupRequest(
-            nickName = "moa",
             email = "moa@com",
             password = "m123",
             password2 = "m123",
-            role = "ROLE_USER",
-            profileEmotion = "happy"
+            role = "ROLE_USER"
         )
 
         // when
@@ -78,12 +74,10 @@ internal class UserServiceTest {
     fun `회원가입에 성공한다`() {
         // given
         val request = SignupRequest(
-            nickName = "moa",
             email = "moa@com",
             password = "m123",
             password2 = "m123",
-            role = "ROLE_USER",
-            profileEmotion = "happy"
+            role = "ROLE_USER"
         )
 
         // when

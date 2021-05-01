@@ -8,9 +8,6 @@ import javax.validation.constraints.NotBlank
 
 data class SignupRequest(
     @NotBlank
-    val nickName: String,
-
-    @NotBlank
     @Email
     val email: String,
 
@@ -20,17 +17,13 @@ data class SignupRequest(
     @NotBlank
     val password2: String,
 
-    val role: String = RoleType.ROLE_USER.name,
-
-    val profileEmotion: String
+    val role: String = RoleType.ROLE_USER.name
 ) {
     fun toEntity(encodedPw: String): User {
         return User(
-            nickName = nickName,
             email = email,
             password = encodedPw,
-            role = RoleType.valueOf(role),
-            profileEmotionType = EmotionType.of(profileEmotion)
+            role = RoleType.valueOf(role)
         )
     }
 }

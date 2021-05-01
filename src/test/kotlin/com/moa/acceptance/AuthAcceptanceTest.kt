@@ -19,7 +19,7 @@ internal class AuthAcceptanceTest : AcceptanceTest() {
         return Stream.of(
             dynamicTest("회원 가입", {
                 // given
-                val request = SignupRequest("moa", "auth@com", "m123", "m123", "ROLE_USER", "happy")
+                val request = SignupRequest("auth@com", "m123", "m123", "ROLE_USER")
 
                 // when
                 val response = post("/api/v1/auth/signup", request)

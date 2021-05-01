@@ -12,8 +12,8 @@ data class User(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    @Column(name = "nick_name", nullable = false)
-    var nickName: String,
+    @Column(name = "nick_name", nullable = true)
+    var nickName: String? = null,
 
     @Email
     @Column(name = "email", unique = true, nullable = false)
