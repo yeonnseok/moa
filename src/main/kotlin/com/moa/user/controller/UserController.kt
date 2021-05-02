@@ -16,7 +16,6 @@ class UserController(
     private val userService: UserService
 ) {
     @GetMapping("/me")
-    @PreAuthorize("hasRole('USER')")
     fun find(@LoginUser user: UserPrincipal): ResponseEntity<ApiResponse> {
         val findUser = userService.find(user.getId())
         return ResponseEntity
@@ -24,7 +23,6 @@ class UserController(
     }
 
     @PatchMapping("/me")
-    @PreAuthorize("hasRole('USER')")
     fun update(
         @LoginUser user: UserPrincipal,
         @RequestBody request: UserUpdateRequest

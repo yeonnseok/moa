@@ -1,12 +1,17 @@
 package com.moa.acceptance
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.moa.auth.controller.request.LoginRequest
 import com.moa.auth.controller.request.SignupRequest
 import com.moa.auth.controller.response.TokenResponse
 import com.moa.common.ApiResponse
 import com.moa.common.ResultType
 import com.moa.record.domain.Description
 import com.moa.record.domain.DescriptionRepository
+import com.moa.record.domain.EmotionType
+import com.moa.user.domain.RoleType
+import com.moa.user.domain.User
+import com.moa.user.domain.UserRepository
 import io.kotlintest.shouldBe
 import io.restassured.RestAssured
 import io.restassured.specification.RequestSpecification
@@ -16,6 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.jdbc.Sql
 
@@ -29,6 +35,12 @@ abstract class AcceptanceTest {
 
     @Autowired
     private lateinit var descriptionRepository: DescriptionRepository
+
+    @Autowired
+    private lateinit var userRepository: UserRepository
+
+    @Autowired
+    private lateinit var passwordEncoder: PasswordEncoder
 
     @Autowired
     protected lateinit var objectMapper: ObjectMapper
@@ -62,18 +74,29 @@ abstract class AcceptanceTest {
     }
 
     private fun createUser(): String {
-        val request = SignupRequest("moa@com", "m123", "m123", "ROLE_USER")
+        val user = userRepository.save(
+            User(
+                nickName = "moa",
+                email = "moa@com",
+                password = passwordEncoder.encode("m123"),
+                profileEmotionType = EmotionType.HAPPY,
+                role = RoleType.ROLE_USER
+            )
+        )
+        userId = user.id
 
-        val response = post("/api/v1/auth/signup", request)
+        val request = LoginRequest("moa@com", "m123")
+
+        val response = login("/api/v1/auth/login", request)
 
         response.result shouldBe ResultType.SUCCESS
-        response.statusCode shouldBe HttpStatus.CREATED.value()
+        response.statusCode shouldBe HttpStatus.OK.value()
 
         val tokenResponse = getResponseData(response.data, TokenResponse::class.java) as TokenResponse
         return tokenResponse.token
     }
 
-    fun getResponseData(data: Any, classType: Class<*>): Any {
+    protected fun getResponseData(data: Any, classType: Class<*>): Any {
         val jsonData = objectMapper.writeValueAsString(data)
         return objectMapper.readValue(jsonData, classType)
     }
@@ -118,8 +141,8 @@ abstract class AcceptanceTest {
                 extract().`as`(ApiResponse::class.java)
     }
 
-    protected fun patch(path: String, request: Any) {
-        given().
+    protected fun patch(path: String, request: Any): ApiResponse {
+        return given().
                 auth().oauth2(bearerToken).
                 body(request).
                 contentType(MediaType.APPLICATION_JSON_VALUE).
@@ -128,6 +151,19 @@ abstract class AcceptanceTest {
                 patch(path).
         then().
                 log().all().
-                statusCode(HttpStatus.OK.value())
+                statusCode(HttpStatus.OK.value()).
+                extract().`as`(ApiResponse::class.java)
+    }
+
+    protected fun delete(path: String) {
+        given().
+                auth().oauth2(bearerToken).
+                contentType(MediaType.APPLICATION_JSON_VALUE).
+                accept(MediaType.APPLICATION_JSON_VALUE).
+        `when`().
+                patch(path).
+        then().
+                log().all().
+                statusCode(HttpStatus.NO_CONTENT.value())
     }
 }
