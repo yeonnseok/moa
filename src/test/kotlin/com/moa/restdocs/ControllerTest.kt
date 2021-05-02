@@ -1,6 +1,7 @@
 package com.moa.restdocs
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.moa.TestDataLoader
 import io.kotlintest.specs.AbstractAnnotationSpec.Ignore
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -30,4 +31,7 @@ abstract class ControllerTest {
 
     @Autowired
     protected lateinit var objectMapper: ObjectMapper
+
+    @Autowired
+    protected lateinit var dataLoader: TestDataLoader
 }

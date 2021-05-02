@@ -4,23 +4,16 @@ import com.moa.bookmark.controller.request.BookmarkCreateRequest
 import com.moa.bookmark.controller.response.BookmarkCreateResponse
 import com.moa.bookmark.controller.response.BookmarkResponse
 import com.moa.common.ResultType
-import com.moa.recommendation.domain.*
+import com.moa.recommendation.domain.Recommendation
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import java.util.stream.Stream
 
 class BookmarkAcceptanceTest : AcceptanceTest() {
-
-    @Autowired
-    private lateinit var contentRepository: ContentRepository
-
-    @Autowired
-    private lateinit var recommendationRepository: RecommendationRepository
 
     private var recommendation: Recommendation? = null
 
@@ -28,28 +21,16 @@ class BookmarkAcceptanceTest : AcceptanceTest() {
 
     @DisplayName("북마크 인수테스트")
     @TestFactory
-    fun manageRecommendation(): Stream<DynamicTest> {
+    fun manageBookmark(): Stream<DynamicTest> {
         return Stream.of(
             DynamicTest.dynamicTest("추천 받은 컨텐츠 북마크하기", {
                 // given
-                val content = contentRepository.save(
-                    Content(
-                        title = "Spider Man",
-                        contents = "peter parker",
-                        minValue = 10,
-                        maxValue = 20,
-                        type = ContentType.MOVIE
-                    )
-                )
-                recommendation = recommendationRepository.save(
-                    Recommendation(
-                        userId = userId!!,
-                        recordId = 1,
-                        content = content
-                    )
-                )
+                val record = dataLoader.sample_record_by(userId!!)
+                val content = dataLoader.sample_content_spiderman()
+                recommendation = dataLoader.sample_recommendation_by(userId!!, record.id!!, content)
+
                 val request = BookmarkCreateRequest(
-                    recommendationId = 1
+                    recommendationId = recommendation!!.id!!
                 )
 
                 // when
@@ -58,8 +39,11 @@ class BookmarkAcceptanceTest : AcceptanceTest() {
                 // then
                 response.result shouldBe ResultType.SUCCESS
                 response.statusCode shouldBe HttpStatus.CREATED.value()
+
                 val createResponse = getResponseData(response.data, BookmarkCreateResponse::class.java) as BookmarkCreateResponse
-                createResponse.bookmarkId shouldBe 1
+                createResponse.bookmarkId shouldNotBe null
+
+                bookmarkId = createResponse.bookmarkId
             }),
 
             DynamicTest.dynamicTest("북마크 목록 조회하기", {
@@ -69,8 +53,6 @@ class BookmarkAcceptanceTest : AcceptanceTest() {
                 // then
                 response.result shouldBe ResultType.SUCCESS
                 response.statusCode shouldBe HttpStatus.OK.value()
-                response.data shouldNotBe null
-                // TODO
             }),
 
             DynamicTest.dynamicTest("북마크 상세 조회하기", {
@@ -80,11 +62,12 @@ class BookmarkAcceptanceTest : AcceptanceTest() {
                 // then
                 response.result shouldBe ResultType.SUCCESS
                 response.statusCode shouldBe HttpStatus.OK.value()
-                val data = (response.data as BookmarkResponse)
-                data.record.recordId shouldBe recommendation!!.recordId
-                data.recommendation.title shouldBe recommendation!!.content.title
-                data.recommendation.contents shouldBe recommendation!!.content.contents
-                data.recommendation.type shouldBe recommendation!!.content.type
+
+                val detail = getResponseData(response.data, BookmarkResponse::class.java) as BookmarkResponse
+                detail.recordId shouldBe recommendation!!.recordId
+                detail.title shouldBe recommendation!!.content.title
+                detail.contents shouldBe recommendation!!.content.contents
+                detail.type shouldBe recommendation!!.content.type
             }),
 
             DynamicTest.dynamicTest("북마크 취소하기", {

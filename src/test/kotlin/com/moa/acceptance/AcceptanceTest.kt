@@ -1,6 +1,7 @@
 package com.moa.acceptance
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.moa.TestDataLoader
 import com.moa.auth.controller.request.LoginRequest
 import com.moa.auth.controller.request.SignupRequest
 import com.moa.auth.controller.response.TokenResponse
@@ -36,11 +37,8 @@ abstract class AcceptanceTest {
     @Autowired
     private lateinit var descriptionRepository: DescriptionRepository
 
-    @Autowired
-    private lateinit var userRepository: UserRepository
-
-    @Autowired
-    private lateinit var passwordEncoder: PasswordEncoder
+   @Autowired
+    protected lateinit var dataLoader: TestDataLoader
 
     @Autowired
     protected lateinit var objectMapper: ObjectMapper
@@ -64,25 +62,11 @@ abstract class AcceptanceTest {
     }
 
     private fun initDescriptions() {
-        descriptionRepository.save(
-            Description(
-                minValue = 36,
-                maxValue = 40,
-                description = "롤러코스터같이 널뛰기하는 기분"
-            )
-        )
+        dataLoader.sample_description_36_to_40()
     }
 
     private fun createUser(): String {
-        val user = userRepository.save(
-            User(
-                nickName = "moa",
-                email = "moa@com",
-                password = passwordEncoder.encode("m123"),
-                profileEmotionType = EmotionType.HAPPY,
-                role = RoleType.ROLE_USER
-            )
-        )
+        val user = dataLoader.sample_user()
         userId = user.id
 
         val request = LoginRequest("moa@com", "m123")
@@ -161,7 +145,7 @@ abstract class AcceptanceTest {
                 contentType(MediaType.APPLICATION_JSON_VALUE).
                 accept(MediaType.APPLICATION_JSON_VALUE).
         `when`().
-                patch(path).
+                delete(path).
         then().
                 log().all().
                 statusCode(HttpStatus.NO_CONTENT.value())

@@ -6,12 +6,14 @@ import com.moa.user.domain.RoleType
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
-import org.springframework.restdocs.headers.HeaderDocumentation
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation
+import org.springframework.restdocs.headers.HeaderDocumentation.headerWithName
+import org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
 import org.springframework.restdocs.payload.PayloadDocumentation.*
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 class UserControllerTest : LoginUserControllerTest() {
 
@@ -25,19 +27,19 @@ class UserControllerTest : LoginUserControllerTest() {
 
         // then
         result
-            .andExpect(MockMvcResultMatchers.status().isOk)
-            .andExpect(MockMvcResultMatchers.jsonPath("result").value(ResultType.SUCCESS.name))
-            .andExpect(MockMvcResultMatchers.jsonPath("statusCode").value(HttpStatus.OK.value()))
-            .andExpect(MockMvcResultMatchers.jsonPath("data.nickName").value("moa"))
-            .andExpect(MockMvcResultMatchers.jsonPath("data.email").value("moa@com"))
-            .andExpect(MockMvcResultMatchers.jsonPath("data.profileEmotion").value("HAPPY"))
-            .andExpect(MockMvcResultMatchers.jsonPath("data.role").value(RoleType.ROLE_USER.name))
-            .andExpect(MockMvcResultMatchers.jsonPath("data.onboardingFlag").value(false))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("result").value(ResultType.SUCCESS.name))
+            .andExpect(jsonPath("statusCode").value(HttpStatus.OK.value()))
+            .andExpect(jsonPath("data.nickName").value("moa"))
+            .andExpect(jsonPath("data.email").value("moa@com"))
+            .andExpect(jsonPath("data.profileEmotion").value("HAPPY"))
+            .andExpect(jsonPath("data.role").value(RoleType.ROLE_USER.name))
+            .andExpect(jsonPath("data.onboardingFlag").value(false))
             .andDo(
-                MockMvcRestDocumentation.document(
+                document(
                     "users/me",
-                    HeaderDocumentation.requestHeaders(
-                        HeaderDocumentation.headerWithName("Authorization").description("인증 토큰")
+                    requestHeaders(
+                        headerWithName("Authorization").description("인증 토큰")
                     ),
                     responseFields(
                         fieldWithPath("result").description("응답 결과"),
@@ -73,12 +75,12 @@ class UserControllerTest : LoginUserControllerTest() {
 
         // then
         result
-            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(status().isOk)
             .andDo(
-                MockMvcRestDocumentation.document(
+                document(
                     "users/update",
-                    HeaderDocumentation.requestHeaders(
-                        HeaderDocumentation.headerWithName("Authorization").description("인증 토큰")
+                    requestHeaders(
+                        headerWithName("Authorization").description("인증 토큰")
                     ),
                     requestFields(
                         fieldWithPath("nickName")

@@ -1,5 +1,6 @@
 package com.moa.user.domain
 
+import com.moa.TestDataLoader
 import com.moa.auth.controller.request.SignupRequest
 import com.moa.exceptions.EmailDuplicatedException
 import com.moa.exceptions.PasswordNotEqualException
@@ -11,7 +12,6 @@ import io.kotlintest.shouldThrow
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.test.context.jdbc.Sql
 
 @SpringBootTest
@@ -22,10 +22,7 @@ internal class UserServiceTest {
     private lateinit var sut: UserService
 
     @Autowired
-    private lateinit var userRepository: UserRepository
-
-    @Autowired
-    private lateinit var passwordEncoder: PasswordEncoder
+    private lateinit var dataLoader: TestDataLoader
 
     @Test
     fun `유저 생성 실패 - 비밀번호 확인`() {
@@ -47,14 +44,7 @@ internal class UserServiceTest {
     @Test
     fun `유저 생성 실패 - 중복 email`() {
         // given
-        userRepository.save(
-            User(
-                nickName = "moa",
-                email = "moa@com",
-                password = passwordEncoder.encode("m123"),
-                role = RoleType.ROLE_USER
-            )
-        )
+        dataLoader.sample_user()
 
         val request = SignupRequest(
             email = "moa@com",
@@ -90,14 +80,7 @@ internal class UserServiceTest {
     @Test
     fun `유저 조회`() {
         // given
-        val savedUser = userRepository.save(
-            User(
-                nickName = "moa",
-                email = "moa@com",
-                password = passwordEncoder.encode("m123"),
-                role = RoleType.ROLE_USER
-            )
-        )
+        val savedUser = dataLoader.sample_user()
 
         // when
         val findUser = sut.find(savedUser.id!!)
@@ -109,14 +92,7 @@ internal class UserServiceTest {
     @Test
     fun `유저 수정`() {
         // given
-        val savedUser = userRepository.save(
-            User(
-                nickName = "moa",
-                email = "moa@com",
-                password = passwordEncoder.encode("m123"),
-                role = RoleType.ROLE_USER
-            )
-        )
+        val savedUser = dataLoader.sample_user()
 
         // when
         val user = sut.update(
@@ -131,7 +107,6 @@ internal class UserServiceTest {
         // then
         val findUser = sut.find(user.id!!)
         findUser.nickName shouldBe "changed username"
-        passwordEncoder.matches("change pw", findUser.password) shouldBe true
         findUser.profileEmotionType shouldBe EmotionType.ANGRY
     }
 }

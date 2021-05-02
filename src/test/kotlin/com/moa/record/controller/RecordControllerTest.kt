@@ -1,10 +1,8 @@
 package com.moa.record.controller
 
 import com.moa.common.ResultType
-import com.moa.record.domain.*
 import com.moa.restdocs.LoginUserControllerTest
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.restdocs.headers.HeaderDocumentation.headerWithName
@@ -15,19 +13,11 @@ import org.springframework.restdocs.request.RequestDocumentation.parameterWithNa
 import org.springframework.restdocs.request.RequestDocumentation.requestParameters
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.LocalDate
 
 class RecordControllerTest : LoginUserControllerTest() {
-
-    @Autowired
-    private lateinit var recordRepository: RecordRepository
-
-    @Autowired
-    private lateinit var emotionRepository: EmotionRepository
-
-    @Autowired
-    private lateinit var descriptionRepository: DescriptionRepository
 
     @Test
     fun `데일리 감정 기록 API`() {
@@ -50,15 +40,16 @@ class RecordControllerTest : LoginUserControllerTest() {
 
         // then
         result
-            .andExpect(MockMvcResultMatchers.status().isCreated)
-            .andExpect(MockMvcResultMatchers.jsonPath("result").value(ResultType.SUCCESS.name))
-            .andExpect(MockMvcResultMatchers.jsonPath("statusCode").value(HttpStatus.CREATED.value()))
-            .andExpect(MockMvcResultMatchers.jsonPath("data.recordId").isNotEmpty)
+            .andExpect(status().isCreated)
+            .andExpect(jsonPath("result").value(ResultType.SUCCESS.name))
+            .andExpect(jsonPath("statusCode").value(HttpStatus.CREATED.value()))
+            .andExpect(jsonPath("data.recordId").isNotEmpty)
             .andDo(
                 document(
                     "record/create",
                     requestHeaders(
-                        headerWithName("Content-Type").description("전송 타입")
+                        headerWithName("Content-Type").description("전송 타입"),
+                        headerWithName("Authorization").description("인증 토큰")
                     ),
                     requestFields(
                         fieldWithPath("recordDate").description("기록 날짜"),
@@ -78,27 +69,9 @@ class RecordControllerTest : LoginUserControllerTest() {
     @Test
     fun `데일리 감정 기록 조회 API`() {
         // given
-        val record = Record(
-            userId = userId!!,
-            recordDate = LocalDate.of(2021, 5, 5),
-            keywords = setOf(Keyword.STUDY, Keyword.MONEY),
-            memo = "first record"
-        )
-        recordRepository.save(record)
-        emotionRepository.save(
-            Emotion(
-                record = record,
-                emotionType = EmotionType.HAPPY,
-                count = 10
-            )
-        )
-        descriptionRepository.save(
-            Description(
-                minValue = 36,
-                maxValue = 40,
-                description = "롤러코스터같이 널뛰기하는 기분"
-            )
-        )
+        dataLoader.sample_description_36_to_40()
+        val record = dataLoader.sample_record_by(userId!!)
+        dataLoader.sample_emotion_happy_by(record, 10)
 
         // when
         val result = mockMvc.perform(
@@ -108,18 +81,21 @@ class RecordControllerTest : LoginUserControllerTest() {
 
         // then
         result
-            .andExpect(MockMvcResultMatchers.status().isOk)
-            .andExpect(MockMvcResultMatchers.jsonPath("result").value(ResultType.SUCCESS.name))
-            .andExpect(MockMvcResultMatchers.jsonPath("statusCode").value(HttpStatus.OK.value()))
-            .andExpect(MockMvcResultMatchers.jsonPath("data.userId").isNotEmpty)
-            .andExpect(MockMvcResultMatchers.jsonPath("data.recordId").isNotEmpty)
-            .andExpect(MockMvcResultMatchers.jsonPath("data.recordDate").value("2021-05-05"))
-            .andExpect(MockMvcResultMatchers.jsonPath("data.memo").value("first record"))
-            .andExpect(MockMvcResultMatchers.jsonPath("data.score").value("40"))
-            .andExpect(MockMvcResultMatchers.jsonPath("data.description").value("롤러코스터같이 널뛰기하는 기분"))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("result").value(ResultType.SUCCESS.name))
+            .andExpect(jsonPath("statusCode").value(HttpStatus.OK.value()))
+            .andExpect(jsonPath("data.userId").isNotEmpty)
+            .andExpect(jsonPath("data.recordId").isNotEmpty)
+            .andExpect(jsonPath("data.recordDate").value("2021-05-05"))
+            .andExpect(jsonPath("data.memo").value("first memo"))
+            .andExpect(jsonPath("data.score").value("40"))
+            .andExpect(jsonPath("data.description").value("롤러코스터같이 널뛰기하는 기분"))
             .andDo(
                 document(
                     "record/daily",
+                    requestHeaders(
+                        headerWithName("Authorization").description("인증 토큰")
+                    ),
                     requestParameters(
                         parameterWithName("recordDate").description("조회 기록 날짜")
                     ),
@@ -143,43 +119,11 @@ class RecordControllerTest : LoginUserControllerTest() {
     @Test
     fun `주간 감정 기록 조회 API`() {
         // given
-        val record1 = Record(
-            userId = userId!!,
-            recordDate = LocalDate.of(2021, 5, 6),
-            keywords = setOf(Keyword.STUDY, Keyword.MONEY),
-            memo = "first record"
-        )
-        val record2 = Record(
-            userId = userId!!,
-            recordDate = LocalDate.of(2021, 5, 7),
-            keywords = setOf(Keyword.FAMILY, Keyword.FRIEND),
-            memo = "second record"
-        )
-        recordRepository.saveAll(listOf(record1, record2))
-        emotionRepository.saveAll(listOf(
-            Emotion(
-                record = record1,
-                emotionType = EmotionType.HAPPY,
-                count = 10
-            ),
-            Emotion(
-                record = record2,
-                emotionType = EmotionType.EXCITED,
-                count = 5
-            )
-        ))
-        descriptionRepository.saveAll(listOf(
-            Description(
-                minValue = 14,
-                maxValue = 16,
-                description = "산뜻하고 행복한 기분"
-            ),
-            Description(
-                minValue = 36,
-                maxValue = 40,
-                description = "롤러코스터같이 널뛰기하는 기분"
-            )
-        ))
+        val record1 = dataLoader.sample_record_first_by(userId!!)
+        val record2 = dataLoader.sample_record_second_by(userId!!)
+        dataLoader.sample_emotion_happy_and_excited_by(record1, record2)
+        dataLoader.sample_description_14_to_16()
+        dataLoader.sample_description_36_to_40()
 
         // when
         val result = mockMvc.perform(
@@ -189,13 +133,16 @@ class RecordControllerTest : LoginUserControllerTest() {
 
         // then
         result
-            .andExpect(MockMvcResultMatchers.status().isOk)
-            .andExpect(MockMvcResultMatchers.jsonPath("result").value(ResultType.SUCCESS.name))
-            .andExpect(MockMvcResultMatchers.jsonPath("statusCode").value(HttpStatus.OK.value()))
-            .andExpect(MockMvcResultMatchers.jsonPath("data.averageScore").value(8))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("result").value(ResultType.SUCCESS.name))
+            .andExpect(jsonPath("statusCode").value(HttpStatus.OK.value()))
+            .andExpect(jsonPath("data.averageScore").value(8))
             .andDo(
                 document(
                     "record/weekly",
+                    requestHeaders(
+                        headerWithName("Authorization").description("인증 토큰")
+                    ),
                     requestParameters(
                         parameterWithName("fromDate").description("시작 날짜"),
                         parameterWithName("toDate").description("끝 날짜")

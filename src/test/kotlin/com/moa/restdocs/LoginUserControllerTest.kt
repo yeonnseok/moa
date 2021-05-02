@@ -2,23 +2,11 @@ package com.moa.restdocs
 
 import com.moa.auth.controller.response.TokenResponse
 import com.moa.common.ApiResponse
-import com.moa.record.domain.EmotionType
-import com.moa.user.domain.RoleType
-import com.moa.user.domain.User
-import com.moa.user.domain.UserRepository
 import org.junit.jupiter.api.BeforeEach
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 
 class LoginUserControllerTest : ControllerTest() {
-
-    @Autowired
-    private lateinit var userRepository: UserRepository
-
-    @Autowired
-    private lateinit var passwordEncoder: PasswordEncoder
 
     protected var token: String? = null
 
@@ -26,15 +14,7 @@ class LoginUserControllerTest : ControllerTest() {
 
     @BeforeEach
     fun setUp() {
-        val user = userRepository.save(
-            User(
-                nickName = "moa",
-                email = "moa@com",
-                password = passwordEncoder.encode("m123"),
-                profileEmotionType = EmotionType.HAPPY,
-                role = RoleType.ROLE_USER
-            )
-        )
+        val user = dataLoader.sample_user()
         userId = user.id
 
         val body = mapOf(

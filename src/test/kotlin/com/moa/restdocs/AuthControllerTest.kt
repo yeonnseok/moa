@@ -1,30 +1,19 @@
 package com.moa.restdocs
 
 import com.moa.common.ResultType
-import com.moa.record.domain.EmotionType
 import com.moa.user.domain.RoleType
-import com.moa.user.domain.User
-import com.moa.user.domain.UserRepository
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.restdocs.headers.HeaderDocumentation.headerWithName
 import org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
 import org.springframework.restdocs.payload.PayloadDocumentation.*
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 class AuthControllerTest : ControllerTest() {
-
-    @Autowired
-    private lateinit var userRepository: UserRepository
-
-    @Autowired
-    private lateinit var passwordEncoder: PasswordEncoder
 
     @Test
     fun `Email 확인 API`() {
@@ -111,15 +100,7 @@ class AuthControllerTest : ControllerTest() {
     @Test
     fun `로그인 API`() {
         // given
-        userRepository.save(
-            User(
-                nickName = "moa",
-                email = "moa@com",
-                password = passwordEncoder.encode("m123"),
-                profileEmotionType = EmotionType.HAPPY,
-                role = RoleType.ROLE_USER
-            )
-        )
+        dataLoader.sample_user()
 
         val body = mapOf(
             "email" to "moa@com",
