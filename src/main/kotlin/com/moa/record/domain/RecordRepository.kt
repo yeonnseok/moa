@@ -10,4 +10,6 @@ interface RecordRepository : JpaRepository<Record, Long> {
     fun findByUserIdAndRecordDate(userId: Long, recordDate: LocalDate): Record?
 
     fun findByUserIdAndRecordDateGreaterThanEqualAndRecordDateLessThanEqual(userId: Long, fromDate: LocalDate, toDate: LocalDate): List<Record>
+
+    fun findByRecordDateGreaterThanEqualAndRecordDateLessThanEqual(fromDate: LocalDate, toDate: LocalDate): List<Record>
 }

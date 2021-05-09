@@ -143,7 +143,7 @@ class TestDataLoader(
         ),
         Emotion(
             record = record2,
-            emotionType = EmotionType.EXCITED,
+            emotionType = EmotionType.FLUTTER,
             count = 5
         )
     ))

@@ -137,6 +137,7 @@ class RecordControllerTest : LoginUserControllerTest() {
             .andExpect(jsonPath("result").value(ResultType.SUCCESS.name))
             .andExpect(jsonPath("statusCode").value(HttpStatus.OK.value()))
             .andExpect(jsonPath("data.averageScore").value(8))
+            .andExpect(jsonPath("data.empathyPercentage").value(100))
             .andDo(
                 document(
                     "record/weekly",
@@ -151,6 +152,7 @@ class RecordControllerTest : LoginUserControllerTest() {
                         fieldWithPath("result").description("응답 결과"),
                         fieldWithPath("statusCode").description("결과 코드"),
                         fieldWithPath("data.averageScore").description("평균 온도"),
+                        fieldWithPath("data.empathyPercentage").description("공감 퍼센트"),
                         fieldWithPath("data.records[].recordId").description("기록 ID"),
                         fieldWithPath("data.records[].recordDate").description("기록 날짜"),
                         fieldWithPath("data.records[].score").description("온도"),
