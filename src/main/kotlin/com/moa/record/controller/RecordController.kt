@@ -81,10 +81,11 @@ class RecordController(
     fun delete(
             @LoginUser user: UserPrincipal,
             @PathVariable id: Long
-    ): ResponseEntity<ApiResponse> {
+    ): ResponseEntity<Unit> {
         recordService.delete(user.getId(), id)
         return ResponseEntity
-                .ok(ApiResponse(data = null))
+                .noContent()
+                .build()
     }
 
 }
