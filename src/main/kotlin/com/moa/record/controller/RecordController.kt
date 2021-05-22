@@ -64,4 +64,7 @@ class RecordController(
         return ResponseEntity
             .ok(ApiResponse(data = recordResponses))
     }
+
+    // TODO: 삭제
+
 }
