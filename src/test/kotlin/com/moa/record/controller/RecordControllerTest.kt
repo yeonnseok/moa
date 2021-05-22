@@ -240,10 +240,7 @@ class RecordControllerTest : LoginUserControllerTest() {
 
         // then
         result
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("result").value(ResultType.SUCCESS.name))
-                .andExpect(jsonPath("statusCode").value(HttpStatus.OK.value()))
-                .andExpect(jsonPath("data").isEmpty)
+                .andExpect(status().isNoContent)
                 .andDo(
                         document(
                                 "record/delete",
@@ -252,11 +249,6 @@ class RecordControllerTest : LoginUserControllerTest() {
                                 ),
                                 pathParameters(
                                         parameterWithName("id").description("감정 기록 ID")
-                                ),
-                                responseFields(
-                                        fieldWithPath("result").description("응답 결과"),
-                                        fieldWithPath("statusCode").description("결과 코드"),
-                                        fieldWithPath("data").description("데이터"),
                                 )
                         )
                 )
