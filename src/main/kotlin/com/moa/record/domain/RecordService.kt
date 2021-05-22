@@ -2,7 +2,9 @@ package com.moa.record.domain
 
 import com.moa.exceptions.RecordExistedSameDayException
 import com.moa.exceptions.RecordNotFoundException
+import com.moa.exceptions.UnAuthorizedException
 import com.moa.record.controller.request.RecordCreateRequest
+import com.moa.record.controller.request.RecordUpdateRequest
 import com.moa.record.controller.response.RecordResponse
 import com.moa.record.controller.response.RecordResponses
 import com.moa.record.controller.response.SimpleRecordResponse
@@ -94,4 +96,29 @@ class RecordService(
             .div(numberOfWeekDay)
             .roundToInt()
 
+    @Transactional
+    fun update(userId: Long, recordId: Long, request: RecordUpdateRequest): RecordResponse {
+        validateAuthor(userId, recordId)
+        val record = recordRepository.findById(recordId)
+                .orElseThrow { RecordNotFoundException() }
+
+        record.memo = request.memo
+        val description = descriptionFinder.find(record.totalScore())
+        return RecordResponse.of(record, description.description)
+    }
+
+    @Transactional
+    fun delete(userId: Long, recordId: Long) {
+        validateAuthor(userId, recordId)
+        recordRepository.deleteById(recordId)
+    }
+
+    private fun validateAuthor(userId: Long, recordId: Long) {
+        val record = recordRepository.findById(recordId)
+                .orElseThrow { RecordNotFoundException() }
+
+        if (record.userId != userId) {
+            throw UnAuthorizedException()
+        }
+    }
 }

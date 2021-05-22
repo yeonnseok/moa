@@ -8,11 +8,14 @@ import org.springframework.http.MediaType
 import org.springframework.restdocs.headers.HeaderDocumentation.headerWithName
 import org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete
 import org.springframework.restdocs.payload.PayloadDocumentation.*
-import org.springframework.restdocs.request.RequestDocumentation.parameterWithName
-import org.springframework.restdocs.request.RequestDocumentation.requestParameters
+import org.springframework.restdocs.request.RequestDocumentation.*
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.LocalDate
@@ -20,7 +23,7 @@ import java.time.LocalDate
 class RecordControllerTest : LoginUserControllerTest() {
 
     @Test
-    fun `데일리 감정 기록 API`() {
+    fun `데일리 감정 기록 생성 API`() {
         // given
         val body = mapOf(
             "recordDate" to LocalDate.of(2021, 5, 5),
@@ -159,5 +162,103 @@ class RecordControllerTest : LoginUserControllerTest() {
                     )
                 )
             )
+    }
+
+    @Test
+    fun `데일리 감정 기록 수정 API`() {
+        // given
+        dataLoader.sample_description_36_to_40()
+        val record = dataLoader.sample_record_by(userId!!)
+        dataLoader.sample_emotion_happy_by(record, 10)
+
+        val body = mapOf(
+                "memo" to "change memo"
+        )
+
+        // when
+        val result = mockMvc.perform(
+                RestDocumentationRequestBuilders.patch("/api/v1/records/{id}", record.id)
+                        .header("Authorization", "Bearer $token")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsBytes(body))
+        )
+
+        // then
+        result
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("result").value(ResultType.SUCCESS.name))
+                .andExpect(jsonPath("statusCode").value(HttpStatus.OK.value()))
+                .andExpect(jsonPath("data.userId").isNotEmpty)
+                .andExpect(jsonPath("data.recordId").isNotEmpty)
+                .andExpect(jsonPath("data.recordDate").value("2021-05-05"))
+                .andExpect(jsonPath("data.memo").value("change memo"))
+                .andExpect(jsonPath("data.score").value("40"))
+                .andExpect(jsonPath("data.description").value("롤러코스터같이 널뛰기하는 기분"))
+                .andDo(
+                        document(
+                                "record/update",
+                                requestHeaders(
+                                        headerWithName("Content-Type").description("전송 타입"),
+                                        headerWithName("Authorization").description("인증 토큰")
+                                ),
+                                pathParameters(
+                                        parameterWithName("id").description("감정 기록 ID")
+                                ),
+                                requestFields(
+                                        fieldWithPath("memo").description("메모")
+                                ),
+                                responseFields(
+                                        fieldWithPath("result").description("응답 결과"),
+                                        fieldWithPath("statusCode").description("결과 코드"),
+                                        fieldWithPath("data.userId").description("사용자 ID"),
+                                        fieldWithPath("data.recordId").description("기록 ID"),
+                                        fieldWithPath("data.recordDate").description("기록 날짜"),
+                                        fieldWithPath("data.emotions[].emotionType").description("감정"),
+                                        fieldWithPath("data.emotions[].count").description("갯수"),
+                                        fieldWithPath("data.keywords[]").description("감정 원인 키워드"),
+                                        fieldWithPath("data.memo").description("메모"),
+                                        fieldWithPath("data.score").description("온도"),
+                                        fieldWithPath("data.description").description("대표 감정")
+                                )
+                        )
+                )
+    }
+
+    @Test
+    fun `데일리 감정 기록 삭제 API`() {
+        // given
+        dataLoader.sample_description_36_to_40()
+        val record = dataLoader.sample_record_by(userId!!)
+        dataLoader.sample_emotion_happy_by(record, 10)
+
+        // when
+        val result = mockMvc.perform(
+                RestDocumentationRequestBuilders.delete("/api/v1/records/{id}", record.id)
+                        .header("Authorization", "Bearer $token")
+        )
+
+        // then
+        result
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("result").value(ResultType.SUCCESS.name))
+                .andExpect(jsonPath("statusCode").value(HttpStatus.OK.value()))
+                .andExpect(jsonPath("data").isEmpty)
+                .andDo(
+                        document(
+                                "record/delete",
+                                requestHeaders(
+                                        headerWithName("Authorization").description("인증 토큰")
+                                ),
+                                pathParameters(
+                                        parameterWithName("id").description("감정 기록 ID")
+                                ),
+                                responseFields(
+                                        fieldWithPath("result").description("응답 결과"),
+                                        fieldWithPath("statusCode").description("결과 코드"),
+                                        fieldWithPath("data").description("데이터"),
+                                )
+                        )
+                )
     }
 }

@@ -4,6 +4,7 @@ import com.moa.auth.domain.UserPrincipal
 import com.moa.common.ApiResponse
 import com.moa.common.utils.yyyy_MM_dd_Formatter
 import com.moa.record.controller.request.RecordCreateRequest
+import com.moa.record.controller.request.RecordUpdateRequest
 import com.moa.record.controller.response.RequestCreateResponse
 import com.moa.record.domain.RecordService
 import com.moa.user.domain.LoginUser
@@ -65,6 +66,25 @@ class RecordController(
             .ok(ApiResponse(data = recordResponses))
     }
 
-    // TODO: 삭제
+    @PatchMapping("/{id}")
+    fun update(
+            @LoginUser user: UserPrincipal,
+            @PathVariable id: Long,
+            @RequestBody request: RecordUpdateRequest
+    ): ResponseEntity<ApiResponse> {
+        val recordResponse = recordService.update(user.getId(), id, request)
+        return ResponseEntity
+                .ok(ApiResponse(data = recordResponse))
+    }
+
+    @DeleteMapping("/{id}")
+    fun delete(
+            @LoginUser user: UserPrincipal,
+            @PathVariable id: Long
+    ): ResponseEntity<ApiResponse> {
+        recordService.delete(user.getId(), id)
+        return ResponseEntity
+                .ok(ApiResponse(data = null))
+    }
 
 }

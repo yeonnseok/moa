@@ -22,7 +22,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.jdbc.Sql
 
@@ -80,7 +79,7 @@ abstract class AcceptanceTest {
         return tokenResponse.token
     }
 
-    protected fun getResponseData(data: Any, classType: Class<*>): Any {
+    protected fun getResponseData(data: Any?, classType: Class<*>): Any {
         val jsonData = objectMapper.writeValueAsString(data)
         return objectMapper.readValue(jsonData, classType)
     }
@@ -148,6 +147,6 @@ abstract class AcceptanceTest {
                 delete(path).
         then().
                 log().all().
-                statusCode(HttpStatus.NO_CONTENT.value())
+                statusCode(HttpStatus.OK.value())
     }
 }
