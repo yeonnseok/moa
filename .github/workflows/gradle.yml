@@ -53,7 +53,7 @@ jobs:
           aws-region: ap-northeast-2
 
       - name: S3 업로드
-        run: aws deploy push --application-name moa --s3-location s3://moa-backend/deploy/build.zip --source .
+        run: aws deploy push --application-name moa-deploy --s3-location s3://moa-backend/deploy/build.zip --source .
 
       - name: code deploy
-        run: aws deploy create-deployment --application-name moa --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name moa-deploy-group --s3-location bucket=moa-backend,bundleType=zip,key=deploy/build.zip
+        run: aws deploy create-deployment --application-name moa-deploy --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name moa-deploy-group --s3-location bucket=moa-backend,bundleType=zip,key=deploy/build.zip
