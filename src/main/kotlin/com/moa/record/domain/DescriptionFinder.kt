@@ -11,6 +11,6 @@ class DescriptionFinder(
 ) {
     fun find(score: Int): Description {
         return descriptionRepository.findByMaxValueGreaterThanEqualAndMinValueLessThanEqual(score, score)
-            .randomOrNull() ?: throw DescriptionNotFoundException()
+            .randomOrNull() ?: throw DescriptionNotFoundException("저장된 대표감정이 없습니다. Score : ${score}")
     }
 }
