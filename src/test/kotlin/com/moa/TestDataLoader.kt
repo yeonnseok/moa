@@ -4,6 +4,7 @@ import com.moa.bookmark.domain.Bookmark
 import com.moa.bookmark.domain.BookmarkRepository
 import com.moa.recommendation.domain.*
 import com.moa.record.domain.*
+import com.moa.user.domain.AuthProvider
 import com.moa.user.domain.RoleType
 import com.moa.user.domain.User
 import com.moa.user.domain.UserRepository
@@ -31,7 +32,8 @@ class TestDataLoader(
             email = "moa@com",
             password = passwordEncoder.encode("m123"),
             profileEmotionType = EmotionType.HAPPY,
-            role = RoleType.ROLE_USER
+            role = RoleType.ROLE_USER,
+            authProvider = AuthProvider.LOCAL
         )
     )
 

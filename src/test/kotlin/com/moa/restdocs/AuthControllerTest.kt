@@ -1,6 +1,7 @@
 package com.moa.restdocs
 
 import com.moa.common.ResultType
+import com.moa.user.domain.AuthProvider
 import com.moa.user.domain.RoleType
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
@@ -60,7 +61,8 @@ class AuthControllerTest : ControllerTest() {
             "email" to "moa@com",
             "password" to "m123",
             "password2" to "m123",
-            "role" to RoleType.ROLE_USER.name
+            "role" to RoleType.ROLE_USER.name,
+            "authProvider" to AuthProvider.GOOGLE.name
         )
 
         // when
@@ -87,7 +89,8 @@ class AuthControllerTest : ControllerTest() {
                         fieldWithPath("email").description("이메일"),
                         fieldWithPath("password").description("비밀번호"),
                         fieldWithPath("password2").description("비밀번호 확인"),
-                        fieldWithPath("role").description("권한")
+                        fieldWithPath("role").description("권한"),
+                        fieldWithPath("authProvider").description("Auth Provider")
                     ),
                     responseFields(
                         fieldWithPath("result").description("응답 결과"),

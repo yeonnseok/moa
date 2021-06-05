@@ -57,8 +57,7 @@ class CustomOAuth2UserService(
             email = oAuth2UserInfo.getEmail(),
             password = oAuth2UserInfo.getOAuthId(),
             role = RoleType.ROLE_USER,
-            authProvider = AuthProvider.of(oAuth2UserRequest.clientRegistration.registrationId),
-            oAuthId = oAuth2UserInfo.getOAuthId()
+            authProvider = AuthProvider.of(oAuth2UserRequest.clientRegistration.registrationId)
         )
         return userRepository.save(user)
     }

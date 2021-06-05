@@ -32,10 +32,7 @@ data class User(
 
     @Enumerated(EnumType.STRING)
     @Column(name = "auth_provider")
-    var authProvider: AuthProvider = AuthProvider.LOCAL,
-
-    @Column(name = "oauth_id")
-    var oAuthId: String? = null,
+    var authProvider: AuthProvider,
 
     @Type(type="yes_no")
     @Column(name = "onboarding_flag", nullable = false)
