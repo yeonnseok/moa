@@ -3,6 +3,7 @@ package com.moa.record.domain
 enum class Keyword(
     val text: String
 ) {
+    LOVE("사랑"),
     FAMILY("가족"),
     STUDY("공부"),
     FRIEND("관계"),
