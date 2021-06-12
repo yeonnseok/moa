@@ -10,6 +10,7 @@ class RecommendationService(
     private val contentFinder: ContentFinder,
     private val recommendationRepository: RecommendationRepository
 ) {
+    @Transactional
     fun recommend(userId: Long, recordId: Long, score: Int): RecommendationResponse {
         val content = contentFinder.findRandomContentByScore(score)
         val recommendation = recommendationRepository.save(
