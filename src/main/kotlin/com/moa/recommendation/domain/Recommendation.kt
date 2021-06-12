@@ -17,5 +17,8 @@ data class Recommendation(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "content_id")
-    var content: Content
+    var content: Content,
+
+    @Column(name = "description", nullable = false)
+    var description: String
 ) : BaseEntity()

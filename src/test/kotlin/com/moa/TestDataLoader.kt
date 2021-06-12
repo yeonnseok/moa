@@ -83,7 +83,8 @@ class TestDataLoader(
         Recommendation(
             userId = userId,
             recordId = 1,
-            content = content
+            content = content,
+            description = sample_description_14_to_16().description
         )
     )
 
@@ -91,7 +92,8 @@ class TestDataLoader(
         Recommendation(
             userId = userId,
             recordId = recordId,
-            content = content
+            content = content,
+            description = sample_description_14_to_16().description
         )
     )
 

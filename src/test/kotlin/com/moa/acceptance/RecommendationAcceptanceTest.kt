@@ -17,9 +17,12 @@ class RecommendationAcceptanceTest : AcceptanceTest() {
             DynamicTest.dynamicTest("감정 온도 기반으로 컨텐츠 추천 받기", {
                 // given
                 dataLoader.sample_content_spiderman()
+                dataLoader.sample_description_14_to_16()
+                val record = dataLoader.sample_record_by(userId!!)
+                dataLoader.sample_emotion_happy_by(record, 4)
 
                 // when
-                val response = get("/api/v1/recommendations?recordId=1&score=16")
+                val response = get("/api/v1/recommendations?recordId=${record.id!!}")
 
                 // then
                 response.result shouldBe ResultType.SUCCESS

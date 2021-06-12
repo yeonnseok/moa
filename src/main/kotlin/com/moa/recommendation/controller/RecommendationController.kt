@@ -15,16 +15,11 @@ import org.springframework.web.bind.annotation.RestController
 class RecommendationController(
     private val recommendationService: RecommendationService
 ) {
-    @GetMapping(params = ["recordId", "score"])
-    fun recommend(
-        @LoginUser user: UserPrincipal,
-        @RequestParam recordId: Long,
-        @RequestParam score: Int
-    ): ResponseEntity<ApiResponse> {
+    @GetMapping(params = ["recordId"])
+    fun recommend(@LoginUser user: UserPrincipal, @RequestParam recordId: Long): ResponseEntity<ApiResponse> {
         val recommendation = recommendationService.recommend(
             userId = user.getId(),
-            recordId = recordId,
-            score = score
+            recordId = recordId
         )
 
         return ResponseEntity

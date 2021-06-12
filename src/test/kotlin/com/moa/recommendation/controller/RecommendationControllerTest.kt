@@ -28,7 +28,7 @@ class RecommendationControllerTest : LoginUserControllerTest() {
 
         // when
         val result = mockMvc.perform(
-            get("/api/v1/recommendations?recordId=${record.id}&score=16")
+            get("/api/v1/recommendations?recordId=${record.id}")
                 .header("Authorization", "Bearer $token")
         )
 
@@ -48,12 +48,13 @@ class RecommendationControllerTest : LoginUserControllerTest() {
                         headerWithName("Authorization").description("인증 토큰")
                     ),
                     requestParameters(
-                        parameterWithName("recordId").description("감정 기록 Id"),
-                        parameterWithName("score").description("온도")
+                        parameterWithName("recordId").description("감정 기록 Id")
                     ),
                     responseFields(
                         fieldWithPath("result").description("응답 결과"),
                         fieldWithPath("statusCode").description("결과 코드"),
+                        fieldWithPath("data.contentId").description("컨텐츠 ID"),
+                        fieldWithPath("data.description").description("대표 기분"),
                         fieldWithPath("data.recommendationId").description("추천 컨텐츠 ID"),
                         fieldWithPath("data.title").description("제목"),
                         fieldWithPath("data.contents").description("내용"),

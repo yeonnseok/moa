@@ -21,9 +21,12 @@ internal class RecommendationServiceTest {
     fun `점수 기반 추천 컨텐츠 조회`() {
         // given
         val content = dataLoader.sample_content_spiderman()
+        dataLoader.sample_description_14_to_16()
+        val record = dataLoader.sample_record_by(1)
+        dataLoader.sample_emotion_happy_by(record, 4)
 
         // when
-        val recommendation = sut.recommend(1, 1, 16)
+        val recommendation = sut.recommend(1, record.id!!)
 
         // then
         recommendation.title shouldBe content.title
