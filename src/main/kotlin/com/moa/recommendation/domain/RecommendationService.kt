@@ -12,6 +12,12 @@ class RecommendationService(
 ) {
     @Transactional
     fun recommend(userId: Long, recordId: Long, score: Int): RecommendationResponse {
+        val exist = recommendationRepository.findByRecordId(recordId)
+
+        if (exist != null) {
+            return RecommendationResponse.of(exist)
+        }
+
         val content = contentFinder.findRandomContentByScore(score)
         val recommendation = recommendationRepository.save(
             Recommendation(
