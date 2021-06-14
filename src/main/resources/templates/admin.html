@@ -3,42 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin</title>
-    <style>
-        table {
-            width: 60%;
-            border-top: 1px solid #444444;
-            border-collapse: collapse;
-            text-align: center
-        }
-        th, td {
-            border-bottom: 1px solid #444444;
-            padding: 10px;
-        }
-    </style>
 </head>
 <body>
 <h1>Admin Page</h1>
-<a href="#">Description</a>
-<a href="#">Content</a>
-
-<table class="table">
-<h4>Description</h4> <a href="/descriptions/create"><button>추가</button></a>
-<thead>
-<tr>
-    <th>id</th>
-    <th>description</th>
-    <th>min</th>
-    <th>max</th>
-</tr>
-</thead>
-<tbody>
-<tr th:each="description : ${descriptions}">
-    <td th:text="${description.id}">1</td>
-    <td><a th:href="@{|/descriptions/${description.id}|}" th:text="${description.description}">false</a></td>
-    <td th:text="${description.minValue}"></td>
-    <td th:text="${description.maxValue}"></td>
-</tr>
-</tbody>
-</table>
+<a href="/admin/descriptions"><button>Description</button></a>
+<a href="/admin/contents"><button>Content</button></a>
 </body>
 </html>

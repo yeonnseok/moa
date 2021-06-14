@@ -19,13 +19,18 @@ class PageController(
     }
 
     @GetMapping("/admin")
-    fun admin(model: Model): String {
-        val descriptions = descriptionFinder.findAll()
-        model.addAttribute("descriptions", descriptions)
+    fun admin(): String {
         return "admin"
     }
 
-    @GetMapping("/descriptions/{id}")
+    @GetMapping("/admin/descriptions")
+    fun descriptionList(model: Model): String {
+        val descriptions = descriptionFinder.findAll()
+        model.addAttribute("descriptions", descriptions)
+        return "description-list"
+    }
+
+    @GetMapping("/admin/descriptions/{id}")
     fun description(
         @PathVariable id: Long,
         model: Model
@@ -35,7 +40,7 @@ class PageController(
         return "description"
     }
 
-    @GetMapping("/descriptions/create")
+    @GetMapping("/admin/descriptions/create")
     fun descriptionForm(): String {
         return "description-form"
     }

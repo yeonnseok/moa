@@ -18,7 +18,7 @@
 </form>
 <button id="submit">수정</button>
 <button id="delete">삭제</button>
-<button th:onclick="|location.href='@{/admin}'|">취소</button>
+<button th:onclick="|location.href='@{/admin/descriptions}'|">취소</button>
 
 
 <script type="text/javascript">
@@ -82,7 +82,7 @@
                     return
                 }
                 alert('수정 성공')
-                window.location.href = '/admin'
+                window.location.href = '/admin/descriptions'
             }).catch(() => {
                 console.log('failed')
                 alert('수정 중 문제가 발생했습니다')
@@ -104,7 +104,7 @@
                         return
                     }
                     alert('삭제 성공')
-                    window.location.href = '/admin'
+                    window.location.href = '/admin/descriptions'
                 }).catch(() => {
                     console.log('failed')
                     alert('삭제 중 문제가 발생했습니다')
