@@ -44,4 +44,11 @@ class PageController(
     fun descriptionForm(): String {
         return "description-form"
     }
+
+    @GetMapping("/admin/contents")
+    fun contentList(model: Model): String {
+        val contents = contentFinder.findAll()
+        model.addAttribute("contents", contents)
+        return "content-list"
+    }
 }
