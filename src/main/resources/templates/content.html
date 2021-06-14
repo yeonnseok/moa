@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+</head>
+<body>
+<h3>content 수정</h3>
+
+<form>
+    <input id="cid" th:value="${content.id}" hidden />
+    <label for="title">title</label>:
+    <input type="text" id="title" name="title" th:value="${content.title}" autofocus="autofocus" /> <br />
+    <label for="contents">content</label>:
+    <textarea id="contents" name="contents" th:value="${content.contents}" th:text="${content.contents}"autofocus="autofocus"></textarea> <br />
+    <label for="type">type</label>:
+    <select id="type" name="type" th:value="${content.type}">
+        <option value="MOVIE">영화</option>
+        <option value="MUSIC">음악</option>
+    </select> <br/>
+    <label for="minValue">minValue</label>:
+    <input type="number" id="minValue" th:value="${content.minValue}" name="minValue" /> <br />
+    <label for="maxValue">maxValue</label>:
+    <input type="number" id="maxValue" th:value="${content.maxValue}" name="maxValue" /> <br />
+</form>
+<button id="submit">수정</button>
+<button id="delete">삭제</button>
+<button th:onclick="|location.href='@{/admin/contents}'|">취소</button>
+
+
+<script type="text/javascript">
+    const token = localStorage.getItem("bearerToken")
+    const METHOD = {
+        PATCH(data) {
+            return {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    ...data
+                })
+            }
+        },
+        DELETE() {
+            return {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            }
+        }
+    }
+    const request = (uri, config) => fetch(uri, config).then(data => data.json())
+
+    const $submitBtn = document.querySelector('#submit')
+    const $deleteBtn = document.querySelector('#delete')
+    const $cid = document.querySelector('#cid')
+    const $title = document.querySelector('#title')
+    const $contents = document.querySelector('#contents')
+    const $type = document.querySelector('#type')
+    const $minValue = document.querySelector('#minValue')
+    const $maxValue = document.querySelector('#maxValue')
+
+    function validateFields(title, contents, type, minValue, maxValue) {
+        if (!title || !contents || !type || !minValue || !maxValue) {
+            alert('모든 필드는 필수 값입니다')
+            return null
+        }
+
+        return {title, contents, type, minValue, maxValue}
+    }
+    const update = async event => {
+        if (event.key && event.key !== KEY_TYPE.ENTER) {
+            return
+        }
+        event.preventDefault()
+
+        const data = validateFields($title.value, $contents.value, $type.value, $minValue.value, $maxValue.value)
+        if (data == null) {
+            return
+        }
+        const id = $cid.value
+        await request(`/admin/v1/contents/${id}`, METHOD.PATCH(data))
+            .then((response) => {
+                if (response.statusCode >= 400) {
+                    alert(response.data)
+                    return
+                }
+                alert('수정 성공')
+                window.location.href = '/admin/contents'
+            }).catch(() => {
+                console.log('failed')
+                alert('수정 중 문제가 발생했습니다')
+            })
+    }
+    $submitBtn.addEventListener('click', update)
+
+    const deleteItem = async event => {
+        if (event.key && event.key !== KEY_TYPE.ENTER) {
+            return
+        }
+        event.preventDefault()
+        const id = $cid.value
+        if (confirm("삭제하시겠습니까?")) {
+            await request(`/admin/v1/contents/${id}`, METHOD.DELETE())
+                .then((response) => {
+                    if (response.statusCode >= 400) {
+                        alert(response.data)
+                        return
+                    }
+                    alert('삭제 성공')
+                    window.location.href = '/admin/contents'
+                }).catch(() => {
+                    console.log('failed')
+                    alert('삭제 중 문제가 발생했습니다')
+                })
+        }
+    }
+    $deleteBtn.addEventListener('click', deleteItem)
+</script>
+</body>
+</html>

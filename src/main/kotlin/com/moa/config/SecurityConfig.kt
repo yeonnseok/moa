@@ -70,7 +70,7 @@ class SecurityConfig(
         http
             .authorizeRequests()
             .antMatchers("/admin/v1/**").hasRole("ADMIN")
-            .antMatchers("/api/v1/auth/**", "/login/oauth2/**", "/login", "/admin/**").permitAll()
+            .antMatchers("/api/v1/auth/**", "/login/oauth2/**", "/admin/**").permitAll()
             .antMatchers(HttpMethod.OPTIONS, "/api/**").permitAll()
             .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
             .antMatchers("/").permitAll()

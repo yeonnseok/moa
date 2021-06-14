@@ -35,7 +35,7 @@
     <tbody>
     <tr th:each="content : ${contents}">
         <td th:text="${content.id}">1</td>
-        <td><a th:href="@{|/admin/content/${content.id}|}" th:text="${content.title}">false</a></td>
+        <td><a th:href="@{|/admin/contents/${content.id}|}" th:text="${content.title}">false</a></td>
         <td th:text="${content.type}"></td>
         <td th:text="${content.minValue}"></td>
         <td th:text="${content.maxValue}"></td>

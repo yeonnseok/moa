@@ -6,8 +6,10 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
+@RequestMapping("/admin")
 class PageController(
     private val descriptionFinder: DescriptionFinder,
     private val contentFinder: ContentFinder
@@ -18,19 +20,19 @@ class PageController(
         return "login"
     }
 
-    @GetMapping("/admin")
+    @GetMapping
     fun admin(): String {
         return "admin"
     }
 
-    @GetMapping("/admin/descriptions")
+    @GetMapping("/descriptions")
     fun descriptionList(model: Model): String {
         val descriptions = descriptionFinder.findAll()
         model.addAttribute("descriptions", descriptions)
         return "description-list"
     }
 
-    @GetMapping("/admin/descriptions/{id}")
+    @GetMapping("/descriptions/{id}")
     fun description(
         @PathVariable id: Long,
         model: Model
@@ -40,15 +42,30 @@ class PageController(
         return "description"
     }
 
-    @GetMapping("/admin/descriptions/create")
+    @GetMapping("/descriptions/create")
     fun descriptionForm(): String {
         return "description-form"
     }
 
-    @GetMapping("/admin/contents")
+    @GetMapping("/contents")
     fun contentList(model: Model): String {
         val contents = contentFinder.findAll()
         model.addAttribute("contents", contents)
         return "content-list"
+    }
+
+    @GetMapping("/contents/create")
+    fun contentForm(): String {
+        return "content-form"
+    }
+
+    @GetMapping("/contents/{id}")
+    fun content(
+        @PathVariable id: Long,
+        model: Model
+    ): String {
+        val content = contentFinder.findById(id)
+        model.addAttribute("content", content)
+        return "content"
     }
 }
