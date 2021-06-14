@@ -11,7 +11,7 @@ class AdminController(
     private val descriptionService: DescriptionService
 ) {
     @PostMapping("/descriptions")
-    fun createDescription(request: DescriptionRequest): ResponseEntity<ApiResponse> {
+    fun createDescription(@RequestBody request: DescriptionRequest): ResponseEntity<ApiResponse> {
         val description = descriptionService.create(request)
         return ResponseEntity.ok(ApiResponse(data = description))
     }
