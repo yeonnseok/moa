@@ -46,7 +46,7 @@ class SecurityConfig(
 
     override fun configure(web: WebSecurity) {
         web.ignoring()
-            .antMatchers("/docs/**")
+            .antMatchers("/docs/**", "/favicon.ico")
             .antMatchers(HttpMethod.OPTIONS, "/**")
             .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
     }
@@ -69,9 +69,10 @@ class SecurityConfig(
 
         http
             .authorizeRequests()
-            .antMatchers("/api/v1/admin/**").hasRole("ADMIN")
-            .antMatchers("/api/v1/auth/**", "/login/oauth2/**").permitAll()
+            .antMatchers("/admin/v1/**").hasRole("ADMIN")
+            .antMatchers("/api/v1/auth/**", "/login/oauth2/**", "/login").permitAll()
             .antMatchers(HttpMethod.OPTIONS, "/api/**").permitAll()
+            .antMatchers(HttpMethod.GET, "/admin", "/descriptions/**", "/contents/**").permitAll()
             .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
             .antMatchers("/").permitAll()
             .anyRequest().authenticated()

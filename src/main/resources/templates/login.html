@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>admin</title>
+</head>
+<body>
+<h1>어드민 로그인</h1>
+<form>
+    <label for="email">E-Mail</label>:
+    <input type="text" id="email" name="email" autofocus="autofocus" /> <br />
+    <label for="password">PW</label>:
+    <input type="password" id="password" name="password" /> <br />
+</form>
+<button id="submit">로그인</button>
+
+<script type="text/javascript">
+    const METHOD = {
+        POST(data) {
+            return {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    ...data
+                })
+            }
+        }
+    }
+    const request = (uri, config) => fetch(uri, config).then(data => data.json())
+
+    const $submitBtn = document.querySelector('#submit')
+    const $email = document.querySelector('#email')
+    const $password = document.querySelector('#password')
+
+    function validateFields(email, password) {
+        if (!email || !password) {
+            alert('모든 필드는 필수 값입니다')
+            return null
+        }
+        return {email, password}
+    }
+
+    const login = async event => {
+        if (event.key && event.key !== KEY_TYPE.ENTER) {
+            return
+        }
+        event.preventDefault()
+
+        const data = validateFields($email.value, $password.value)
+        if (data == null) {
+            return
+        }
+        await request('/api/v1/auth/login', METHOD.POST(data))
+            .then((response) => {
+                if (response.statusCode >= 400) {
+                    alert(response.data)
+                    return
+                }
+                localStorage.setItem("bearerToken", response.data.token)
+                alert('로그인 성공')
+                window.location.href = '/admin'
+            }).catch(() => {
+                console.log('failed')
+                alert('로그인 중에 문제가 발생했습니다')
+            })
+    }
+    $submitBtn.addEventListener('click', login)
+</script>
+</body>
+</html>
