@@ -1,13 +1,14 @@
 package com.moa.record.domain
 
+import com.moa.bookmark.domain.BookmarkRepository
 import com.moa.exceptions.RecordExistedSameDayException
 import com.moa.exceptions.RecordNotFoundException
 import com.moa.exceptions.UnAuthorizedException
+import com.moa.recommendation.domain.RecommendationRepository
 import com.moa.record.controller.request.RecordCreateRequest
 import com.moa.record.controller.request.RecordUpdateRequest
 import com.moa.record.controller.response.RecordResponse
 import com.moa.record.controller.response.WeeklyRecordResponse
-import com.moa.record.controller.response.SimpleRecordResponse
 import com.moa.record.controller.response.WeeklyEmotionStatic
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -20,7 +21,9 @@ import kotlin.math.roundToInt
 @Transactional(readOnly = true)
 class RecordService(
     private val descriptionFinder: DescriptionFinder,
-    private val recordRepository: RecordRepository
+    private val recordRepository: RecordRepository,
+    private val recommendationRepository: RecommendationRepository,
+    private val bookmarkRepository: BookmarkRepository
 ) {
     private val numberOfWeekDay = 7
 
@@ -127,6 +130,12 @@ class RecordService(
     @Transactional
     fun delete(userId: Long, recordId: Long) {
         validateAuthor(userId, recordId)
+        val recommendation = recommendationRepository.findByRecordId(recordId)
+
+        if (recommendation != null) {
+            bookmarkRepository.deleteByRecommendation(recommendation)
+        }
+
         recordRepository.deleteById(recordId)
     }
 
