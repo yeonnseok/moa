@@ -69,12 +69,12 @@ class RecordService(
             toDate = toDate
         )
 
-        val averageScore = calcAverageScoreForExists(records)
+        val averageScore = calcAverageScore(records)
         val empathyPercentage = getEmpathyPercentage(averageScore, fromDate, toDate)
         val weeklyEmotionStatic = getEmotionStatic(records)
 
         return WeeklyRecordResponse(
-            averageScore = averageScore,
+            averageScore = calcAverageScoreForExists(records),
             empathyPercentage = empathyPercentage,
             weeklyEmotionStatic = weeklyEmotionStatic
         )
