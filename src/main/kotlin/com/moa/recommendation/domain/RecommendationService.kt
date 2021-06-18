@@ -1,5 +1,6 @@
 package com.moa.recommendation.domain
 
+import com.moa.bookmark.domain.BookmarkRepository
 import com.moa.exceptions.RecordNotFoundException
 import com.moa.recommendation.domain.dto.RecommendationResponse
 import com.moa.record.domain.DescriptionFinder
@@ -13,14 +14,16 @@ class RecommendationService(
     private val contentFinder: ContentFinder,
     private val descriptionFinder: DescriptionFinder,
     private val recordRepository: RecordRepository,
-    private val recommendationRepository: RecommendationRepository
+    private val recommendationRepository: RecommendationRepository,
+    private val bookmarkRepository: BookmarkRepository
 ) {
     @Transactional
     fun recommend(userId: Long, recordId: Long): RecommendationResponse {
         val exist = recommendationRepository.findByRecordId(recordId)
 
         if (exist != null) {
-            return RecommendationResponse.of(exist)
+            val bookmark = bookmarkRepository.findByRecommendation(exist)
+            return RecommendationResponse.of(exist, bookmark?.id)
         }
 
         val record = recordRepository.findById(recordId)
@@ -36,6 +39,7 @@ class RecommendationService(
                 description = description.description
             )
         )
-        return RecommendationResponse.of(recommendation)
+
+        return RecommendationResponse.of(recommendation, null)
     }
 }

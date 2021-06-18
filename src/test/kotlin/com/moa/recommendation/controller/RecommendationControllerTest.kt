@@ -59,6 +59,7 @@ class RecommendationControllerTest : LoginUserControllerTest() {
                         fieldWithPath("data.title").description("제목"),
                         fieldWithPath("data.contents").description("내용"),
                         fieldWithPath("data.type").description("컨텐츠 타입"),
+                        fieldWithPath("data.bookmarkId").description("북마크 ID")
                     )
                 )
             )
