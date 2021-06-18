@@ -14,12 +14,6 @@ class PageController(
     private val descriptionFinder: DescriptionFinder,
     private val contentFinder: ContentFinder
 ) {
-
-    @GetMapping("/login")
-    fun login(): String {
-        return "login"
-    }
-
     @GetMapping
     fun admin(): String {
         return "admin"
