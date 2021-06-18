@@ -139,7 +139,7 @@ class RecordControllerTest : LoginUserControllerTest() {
             .andExpect(status().isOk)
             .andExpect(jsonPath("result").value(ResultType.SUCCESS.name))
             .andExpect(jsonPath("statusCode").value(HttpStatus.OK.value()))
-            .andExpect(jsonPath("data.averageScore").value(8))
+            .andExpect(jsonPath("data.averageScore").value(28))
             .andExpect(jsonPath("data.empathyPercentage").value(100))
             .andDo(
                 document(
