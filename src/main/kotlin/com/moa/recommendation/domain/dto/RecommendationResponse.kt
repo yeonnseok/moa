@@ -9,17 +9,19 @@ data class RecommendationResponse(
     val recommendationId: Long,
     val title: String,
     val contents: String,
-    val type: ContentType
+    val type: ContentType,
+    val bookmarkId: Long?
 ) {
     companion object {
-        fun of(recommendation: Recommendation): RecommendationResponse {
+        fun of(recommendation: Recommendation, bookmarkId: Long?): RecommendationResponse {
             return RecommendationResponse(
                 contentId = recommendation.content.id!!,
                 description = recommendation.description,
                 recommendationId = recommendation.id!!,
                 title = recommendation.content.title,
                 contents = recommendation.content.contents,
-                type = recommendation.content.type
+                type = recommendation.content.type,
+                bookmarkId = bookmarkId
             )
         }
     }
