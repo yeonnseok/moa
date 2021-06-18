@@ -169,6 +169,47 @@ class RecordControllerTest : LoginUserControllerTest() {
     }
 
     @Test
+    fun `월간(구간) 감정 기록 조회 API`() {
+        // given
+        val record1 = dataLoader.sample_record_first_by(userId!!)
+        val record2 = dataLoader.sample_record_second_by(userId!!)
+        dataLoader.sample_emotion_happy_and_excited_by(record1, record2)
+        dataLoader.sample_description_14_to_16()
+        dataLoader.sample_description_36_to_40()
+
+        // when
+        val result = mockMvc.perform(
+            get("/api/v1/records/month?fromDate=2021-05-01&toDate=2021-05-08")
+                .header("Authorization", "Bearer $token")
+        )
+
+        // then
+        result
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("result").value(ResultType.SUCCESS.name))
+            .andExpect(jsonPath("statusCode").value(HttpStatus.OK.value()))
+            .andDo(
+                document(
+                    "record/monthly",
+                    requestHeaders(
+                        headerWithName("Authorization").description("인증 토큰")
+                    ),
+                    requestParameters(
+                        parameterWithName("fromDate").description("시작 날짜"),
+                        parameterWithName("toDate").description("끝 날짜")
+                    ),
+                    responseFields(
+                        fieldWithPath("result").description("응답 결과"),
+                        fieldWithPath("statusCode").description("결과 코드"),
+                        fieldWithPath("data[].recordId").description("기록 ID"),
+                        fieldWithPath("data[].recordDate").description("기록 일자"),
+                        fieldWithPath("data[].score").description("온도")
+                    )
+                )
+            )
+    }
+
+    @Test
     fun `데일리 감정 기록 수정 API`() {
         // given
         dataLoader.sample_description_36_to_40()

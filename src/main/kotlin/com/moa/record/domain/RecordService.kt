@@ -8,6 +8,7 @@ import com.moa.recommendation.domain.RecommendationRepository
 import com.moa.record.controller.request.RecordCreateRequest
 import com.moa.record.controller.request.RecordUpdateRequest
 import com.moa.record.controller.response.RecordResponse
+import com.moa.record.controller.response.SimpleRecordResponse
 import com.moa.record.controller.response.WeeklyRecordResponse
 import com.moa.record.controller.response.WeeklyEmotionStatic
 import org.slf4j.LoggerFactory
@@ -145,6 +146,16 @@ class RecordService(
 
         if (record.userId != userId) {
             throw UnAuthorizedException()
+        }
+    }
+
+    fun findMonthly(userId: Long, fromDate: LocalDate, toDate: LocalDate): List<SimpleRecordResponse> {
+        return recordRepository.findByUserIdAndRecordDateGreaterThanEqualAndRecordDateLessThanEqual(
+            userId = userId,
+            fromDate = fromDate,
+            toDate = toDate
+        ).map {
+            SimpleRecordResponse(it.id!!, it.recordDate, it.totalScore())
         }
     }
 }

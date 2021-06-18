@@ -22,19 +22,6 @@ class DataLoader(
 ) : ApplicationRunner {
     override fun run(args: ApplicationArguments) {
 
-        // Save Admin
-        userRepository.save(
-            User(
-                nickName = "admin",
-                email = "admin@com",
-                password = passwordEncoder.encode("moaadmin"),
-                role = RoleType.ROLE_ADMIN,
-                profileEmotionType = EmotionType.HAPPY,
-                authProvider = AuthProvider.LOCAL,
-                onboardingFlag = true
-            )
-        )
-
         // Save Descriptions
         val descriptions = listOf(
             Description(

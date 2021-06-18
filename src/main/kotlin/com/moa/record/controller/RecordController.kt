@@ -66,6 +66,22 @@ class RecordController(
             .ok(ApiResponse(data = weeklyRecordResponse))
     }
 
+    @GetMapping(path = ["/month"],params = ["fromDate", "toDate"])
+    fun findMonthly(
+        @LoginUser user: UserPrincipal,
+        @RequestParam fromDate: String,
+        @RequestParam toDate: String
+    ): ResponseEntity<ApiResponse> {
+        val responses = recordService.findMonthly(
+            userId = user.getId(),
+            fromDate = fromDate.yyyy_MM_dd_Formatter(),
+            toDate = toDate.yyyy_MM_dd_Formatter()
+        )
+
+        return ResponseEntity
+            .ok(ApiResponse(data = responses))
+    }
+
     @PatchMapping("/{id}")
     fun update(
             @LoginUser user: UserPrincipal,
