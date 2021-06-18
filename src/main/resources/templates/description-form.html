@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h3>description 생성</h3>
+
+<form>
+    <label for="description">description</label>:
+    <input type="text" id="description" name="description" autofocus="autofocus" /> <br />
+    <label for="minValue">minValue</label>:
+    <input type="number" id="minValue" name="minValue" /> <br />
+    <label for="maxValue">maxValue</label>:
+    <input type="number" id="maxValue" name="maxValue" /> <br />
+</form>
+<button id="submit">생성</button>
+<button th:onclick="|location.href='@{/admin/descriptions}'|">취소</button>
+
+<script type="text/javascript">
+    const token = localStorage.getItem("bearerToken")
+    const METHOD = {
+        POST(data) {
+            return {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    ...data
+                })
+            }
+        }
+    }
+    const request = (uri, config) => fetch(uri, config).then(data => data.json())
+
+    const $submitBtn = document.querySelector('#submit')
+    const $description = document.querySelector('#description')
+    const $minValue = document.querySelector('#minValue')
+    const $maxValue = document.querySelector('#maxValue')
+
+    function validateFields(description, minValue, maxValue) {
+        if (!description || !minValue || !maxValue) {
+            alert('모든 필드는 필수 값입니다')
+            return null
+        }
+
+        return {description, minValue, maxValue}
+    }
+
+    const create = async event => {
+        if (event.key && event.key !== KEY_TYPE.ENTER) {
+            return
+        }
+        event.preventDefault()
+
+        const data = validateFields($description.value, $minValue.value, $maxValue.value)
+        if (data == null) {
+            return
+        }
+        await request(`/admin/v1/descriptions`, METHOD.POST(data))
+            .then((response) => {
+                if (response.statusCode >= 400) {
+                    alert(response.data)
+                    return
+                }
+                alert('생성 성공')
+                window.location.href = '/admin/descriptions'
+            }).catch(() => {
+                console.log('failed')
+                alert('생성 중 문제가 발생했습니다')
+            })
+    }
+    $submitBtn.addEventListener('click', create)
+</script>
+</body>
+</html>

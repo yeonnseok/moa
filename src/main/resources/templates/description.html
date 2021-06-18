@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+</head>
+<body>
+<h3>description 수정</h3>
+
+<form>
+    <input type="text" id="did" name="did" th:value="${description.id}" hidden/> <br />
+    <label for="description">description</label>:
+    <input type="text" id="description" name="description" th:value="${description.description}" autofocus="autofocus" /> <br />
+    <label for="minValue">minValue</label>:
+    <input type="number" id="minValue" th:value="${description.minValue}" name="minValue" /> <br />
+    <label for="maxValue">maxValue</label>:
+    <input type="number" id="maxValue" th:value="${description.maxValue}" name="maxValue" /> <br />
+</form>
+<button id="submit">수정</button>
+<button id="delete">삭제</button>
+<button th:onclick="|location.href='@{/admin/descriptions}'|">취소</button>
+
+
+<script type="text/javascript">
+    const token = localStorage.getItem("bearerToken")
+    const METHOD = {
+        PATCH(data) {
+            return {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    ...data
+                })
+            }
+        },
+        DELETE() {
+            return {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            }
+        }
+    }
+    const request = (uri, config) => fetch(uri, config).then(data => data.json())
+
+    const $submitBtn = document.querySelector('#submit')
+    const $deleteBtn = document.querySelector('#delete')
+    const $did = document.querySelector('#did')
+    const $description = document.querySelector('#description')
+    const $minValue = document.querySelector('#minValue')
+    const $maxValue = document.querySelector('#maxValue')
+
+    function validateFields(description, minValue, maxValue) {
+        if (!description || !minValue || !maxValue) {
+            alert('모든 필드는 필수 값입니다')
+            return null
+        }
+
+        return {description, minValue, maxValue}
+    }
+
+    const update = async event => {
+        if (event.key && event.key !== KEY_TYPE.ENTER) {
+            return
+        }
+        event.preventDefault()
+
+        const data = validateFields($description.value, $minValue.value, $maxValue.value)
+        if (data == null) {
+            return
+        }
+        const id = $did.value
+        await request(`/admin/v1/descriptions/${id}`, METHOD.PATCH(data))
+            .then((response) => {
+                if (response.statusCode >= 400) {
+                    alert(response.data)
+                    return
+                }
+                alert('수정 성공')
+                window.location.href = '/admin/descriptions'
+            }).catch(() => {
+                console.log('failed')
+                alert('수정 중 문제가 발생했습니다')
+            })
+    }
+    $submitBtn.addEventListener('click', update)
+
+    const deleteItem = async event => {
+        if (event.key && event.key !== KEY_TYPE.ENTER) {
+            return
+        }
+        event.preventDefault()
+        const id = $did.value
+        if (confirm("삭제하시겠습니까?")) {
+            await request(`/admin/v1/descriptions/${id}`, METHOD.DELETE())
+                .then((response) => {
+                    if (response.statusCode >= 400) {
+                        alert(response.data)
+                        return
+                    }
+                    alert('삭제 성공')
+                    window.location.href = '/admin/descriptions'
+                }).catch(() => {
+                    console.log('failed')
+                    alert('삭제 중 문제가 발생했습니다')
+                })
+        }
+    }
+    $deleteBtn.addEventListener('click', deleteItem)
+</script>
+</body>
+</html>
