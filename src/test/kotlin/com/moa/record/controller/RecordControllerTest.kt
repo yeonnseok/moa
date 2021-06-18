@@ -156,9 +156,13 @@ class RecordControllerTest : LoginUserControllerTest() {
                         fieldWithPath("statusCode").description("결과 코드"),
                         fieldWithPath("data.averageScore").description("평균 온도"),
                         fieldWithPath("data.empathyPercentage").description("공감 퍼센트"),
-                        fieldWithPath("data.records[].recordId").description("기록 ID"),
-                        fieldWithPath("data.records[].recordDate").description("기록 날짜"),
-                        fieldWithPath("data.records[].score").description("온도"),
+                        fieldWithPath("data.weeklyEmotionStatic.happy").description("HAPPY 온도"),
+                        fieldWithPath("data.weeklyEmotionStatic.flutter").description("FLUTTER 온도"),
+                        fieldWithPath("data.weeklyEmotionStatic.proud").description("PROUD 온도"),
+                        fieldWithPath("data.weeklyEmotionStatic.nervous").description("NERVOUS 온도"),
+                        fieldWithPath("data.weeklyEmotionStatic.sad").description("SAD 온도"),
+                        fieldWithPath("data.weeklyEmotionStatic.annoy").description("ANNOY 온도"),
+                        fieldWithPath("data.weeklyEmotionStatic.angry").description("ANGRY 온도")
                     )
                 )
             )

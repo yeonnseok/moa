@@ -56,14 +56,14 @@ class RecordController(
         @RequestParam fromDate: String,
         @RequestParam toDate: String
     ): ResponseEntity<ApiResponse> {
-        val recordResponses = recordService.findWeekly(
+        val weeklyRecordResponse = recordService.findWeekly(
             userId = user.getId(),
             fromDate = fromDate.yyyy_MM_dd_Formatter(),
             toDate = toDate.yyyy_MM_dd_Formatter()
         )
 
         return ResponseEntity
-            .ok(ApiResponse(data = recordResponses))
+            .ok(ApiResponse(data = weeklyRecordResponse))
     }
 
     @PatchMapping("/{id}")
