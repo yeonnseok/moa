@@ -6,8 +6,10 @@ import com.moa.exceptions.UnAuthorizedException
 import com.moa.record.controller.request.RecordCreateRequest
 import com.moa.record.controller.request.RecordUpdateRequest
 import com.moa.record.controller.response.RecordResponse
-import com.moa.record.controller.response.RecordResponses
+import com.moa.record.controller.response.WeeklyRecordResponse
 import com.moa.record.controller.response.SimpleRecordResponse
+import com.moa.record.controller.response.WeeklyEmotionStatic
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.math.BigDecimal
@@ -21,6 +23,8 @@ class RecordService(
     private val recordRepository: RecordRepository
 ) {
     private val numberOfWeekDay = 7
+
+    private val log = LoggerFactory.getLogger(javaClass)
 
     @Transactional
     fun create(userId: Long, request: RecordCreateRequest): Long {
@@ -54,7 +58,7 @@ class RecordService(
         return RecordResponse.of(record, description.description)
     }
 
-    fun findWeekly(userId: Long, fromDate: LocalDate, toDate: LocalDate): RecordResponses {
+    fun findWeekly(userId: Long, fromDate: LocalDate, toDate: LocalDate): WeeklyRecordResponse {
         val records = recordRepository.findByUserIdAndRecordDateGreaterThanEqualAndRecordDateLessThanEqual(
             userId = userId,
             fromDate = fromDate,
@@ -63,11 +67,24 @@ class RecordService(
 
         val averageScore = calcAverageScore(records)
         val empathyPercentage = getEmpathyPercentage(averageScore, fromDate, toDate)
+        val weeklyEmotionStatic = getEmotionStatic(records)
 
-        return RecordResponses(
+        return WeeklyRecordResponse(
             averageScore = averageScore,
-            records = records.map { SimpleRecordResponse.of(it) },
-            empathyPercentage = empathyPercentage
+            empathyPercentage = empathyPercentage,
+            weeklyEmotionStatic = weeklyEmotionStatic
+        )
+    }
+
+    private fun getEmotionStatic(records: List<Record>): WeeklyEmotionStatic {
+        return WeeklyEmotionStatic(
+            happy = records.map { it.emotions.filter{ it.emotionType == EmotionType.HAPPY }.firstOrNull()?.count ?: 0 * EmotionType.HAPPY.score }.sum(),
+            flutter = records.map { it.emotions.filter{ it.emotionType == EmotionType.FLUTTER }.firstOrNull()?.count ?: 0 * EmotionType.FLUTTER.score }.sum(),
+            proud = records.map { it.emotions.filter{ it.emotionType == EmotionType.PROUD }.firstOrNull()?.count ?: 0 * EmotionType.PROUD.score }.sum(),
+            nervous = records.map { it.emotions.filter{ it.emotionType == EmotionType.NERVOUS }.firstOrNull()?.count ?: 0 * EmotionType.NERVOUS.score }.sum(),
+            sad = records.map { it.emotions.filter{ it.emotionType == EmotionType.SAD }.firstOrNull()?.count ?: 0 * EmotionType.SAD.score }.sum(),
+            annoy = records.map { it.emotions.filter{ it.emotionType == EmotionType.ANNOY }.firstOrNull()?.count ?: 0 * EmotionType.ANNOY.score }.sum(),
+            angry = records.map { it.emotions.filter{ it.emotionType == EmotionType.ANGRY }.firstOrNull()?.count ?: 0 * EmotionType.ANGRY.score }.sum()
         )
     }
 

@@ -1,7 +1,7 @@
 package com.moa.record.controller.response
 
-data class RecordResponses(
+data class WeeklyRecordResponse(
     val averageScore: Int,
     val empathyPercentage: Int,
-    val records: List<SimpleRecordResponse>
+    val weeklyEmotionStatic: WeeklyEmotionStatic
 )
