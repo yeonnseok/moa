@@ -97,7 +97,8 @@ class BookmarkControllerTest : LoginUserControllerTest() {
                         fieldWithPath("data[].recommendationId").description("추천 컨텐츠 Id"),
                         fieldWithPath("data[].title").description("제목"),
                         fieldWithPath("data[].contents").description("내용"),
-                        fieldWithPath("data[].type").description("컨텐츠 타입")
+                        fieldWithPath("data[].type").description("컨텐츠 타입"),
+                        fieldWithPath("data[].contentId").description("컨텐츠 ID")
                     )
                 )
             )
@@ -147,7 +148,8 @@ class BookmarkControllerTest : LoginUserControllerTest() {
                         fieldWithPath("data.recommendationId").description("추천 컨텐츠 Id"),
                         fieldWithPath("data.title").description("제목"),
                         fieldWithPath("data.contents").description("내용"),
-                        fieldWithPath("data.type").description("컨텐츠 타입")
+                        fieldWithPath("data.type").description("컨텐츠 타입"),
+                        fieldWithPath("data.contentId").description("컨텐츠 ID")
                     )
                 )
             )
