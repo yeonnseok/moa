@@ -89,13 +89,13 @@ class RecordService(
 
     private fun getEmotionStatic(records: List<Record>): WeeklyEmotionStatic {
         return WeeklyEmotionStatic(
-            happy = records.map { (it.emotions.firstOrNull { it.emotionType == EmotionType.HAPPY }?.count ?: 0) * EmotionType.HAPPY.score }.sum(),
-            flutter = records.map { (it.emotions.firstOrNull { it.emotionType == EmotionType.FLUTTER }?.count ?: 0) * EmotionType.FLUTTER.score }.sum(),
-            proud = records.map { (it.emotions.firstOrNull { it.emotionType == EmotionType.PROUD }?.count ?: 0) * EmotionType.PROUD.score }.sum(),
-            nervous = records.map { (it.emotions.firstOrNull { it.emotionType == EmotionType.NERVOUS }?.count ?: 0) * EmotionType.NERVOUS.score }.sum(),
-            sad = records.map { (it.emotions.firstOrNull { it.emotionType == EmotionType.SAD }?.count ?: 0) * EmotionType.SAD.score }.sum(),
-            annoy = records.map { (it.emotions.firstOrNull { it.emotionType == EmotionType.ANNOY }?.count ?: 0) * EmotionType.ANNOY.score }.sum(),
-            angry = records.map { (it.emotions.firstOrNull { it.emotionType == EmotionType.ANGRY }?.count ?: 0)* EmotionType.ANGRY.score }.sum()
+            happy = records.map { it.emotions.firstOrNull { it.emotionType == EmotionType.HAPPY }?.count ?: 0 }.sum(),
+            flutter = records.map { it.emotions.firstOrNull { it.emotionType == EmotionType.FLUTTER }?.count ?: 0 }.sum(),
+            proud = records.map { it.emotions.firstOrNull { it.emotionType == EmotionType.PROUD }?.count ?: 0 }.sum(),
+            nervous = records.map { it.emotions.firstOrNull { it.emotionType == EmotionType.NERVOUS }?.count ?: 0 }.sum(),
+            sad = records.map { it.emotions.firstOrNull { it.emotionType == EmotionType.SAD }?.count ?: 0 }.sum(),
+            annoy = records.map { it.emotions.firstOrNull { it.emotionType == EmotionType.ANNOY }?.count ?: 0 }.sum(),
+            angry = records.map { it.emotions.firstOrNull { it.emotionType == EmotionType.ANGRY }?.count ?: 0 }.sum()
         )
     }
 
