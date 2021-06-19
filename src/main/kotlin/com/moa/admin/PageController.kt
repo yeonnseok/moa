@@ -59,7 +59,9 @@ class PageController(
         model: Model
     ): String {
         val content = contentFinder.findById(id)
+        val imageUrl = "https://moa-backend.s3.ap-northeast-2.amazonaws.com/contents/${content.id!!}.jpeg"
         model.addAttribute("content", content)
+        model.addAttribute("imageUrl", imageUrl)
         return "content"
     }
 }

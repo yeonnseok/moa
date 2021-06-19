@@ -8,6 +8,7 @@
 <h3>content 수정</h3>
 
 <form>
+    <img th:src="${imageUrl}" width="500"/>
     <input id="cid" th:value="${content.id}" hidden />
     <label for="title">title</label>:
     <input type="text" id="title" name="title" th:value="${content.title}" autofocus="autofocus" /> <br />
