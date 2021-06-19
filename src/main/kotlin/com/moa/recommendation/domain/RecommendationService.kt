@@ -1,6 +1,7 @@
 package com.moa.recommendation.domain
 
 import com.moa.bookmark.domain.BookmarkRepository
+import com.moa.exceptions.RecommendationNotFoundException
 import com.moa.exceptions.RecordNotFoundException
 import com.moa.recommendation.domain.dto.RecommendationResponse
 import com.moa.record.domain.DescriptionFinder
@@ -41,5 +42,10 @@ class RecommendationService(
         )
 
         return RecommendationResponse.of(recommendation, null)
+    }
+
+    fun find(recommendationId: Long): Recommendation {
+        return recommendationRepository.findById(recommendationId)
+            .orElseThrow { RecommendationNotFoundException() }
     }
 }
