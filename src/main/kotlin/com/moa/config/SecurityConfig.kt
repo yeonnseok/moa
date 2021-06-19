@@ -110,6 +110,8 @@ class SecurityConfig(
         configuration.addAllowedOrigin("https://d31v2zo1o48kb2.cloudfront.net")
         configuration.addAllowedOrigin("http://moaemotion.com")
         configuration.addAllowedOrigin("https://moaemotion.com")
+        configuration.addAllowedOrigin("http://admin.moaemotion.com")
+        configuration.addAllowedOrigin("https://admin.moaemotion.com")
         configuration.addAllowedHeader("*")
         configuration.addAllowedMethod("*")
 
