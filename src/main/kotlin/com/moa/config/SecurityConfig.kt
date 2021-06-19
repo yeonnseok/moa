@@ -107,6 +107,9 @@ class SecurityConfig(
 
         configuration.setAllowCredentials(true)
         configuration.addAllowedOrigin("http://d31v2zo1o48kb2.cloudfront.net")
+        configuration.addAllowedOrigin("https://d31v2zo1o48kb2.cloudfront.net")
+        configuration.addAllowedOrigin("http://moaemotion.com")
+        configuration.addAllowedOrigin("https://moaemotion.com")
         configuration.addAllowedHeader("*")
         configuration.addAllowedMethod("*")
 
